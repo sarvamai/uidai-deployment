@@ -68,9 +68,20 @@ variable "redis_password" {
   default   = "password"
 }
 
-# Docker Image 
-
+# TODO: Docker Image 
 variable "default_docker_registry_prefix" {
   type    = string
   default = ""
+}
+
+# TODO: Pass Namespace Everywhere 
+variable "fabric_namespace" {
+  type    = string
+  default = "default"
+}
+
+# TODO: Pass service account everywhere 
+variable "fabric_service_account" {
+  type    = string
+  default = "default"
 }
