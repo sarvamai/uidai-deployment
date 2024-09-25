@@ -12,6 +12,11 @@ resource "helm_release" "weaviate" {
   values = [<<EOF
     serviceAccountName: ${var.fabric_service_account}
     replicas: 1
+    tolerations:
+      - key: "sku"
+        operator: "Equal"
+        value: "gpu"
+        effect: "NoSchedule"
     EOF
   ]
 }
