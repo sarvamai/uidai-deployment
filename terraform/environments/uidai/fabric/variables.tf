@@ -69,18 +69,16 @@ variable "redis_password" {
 }
 
 # TODO: Docker Image 
-variable "default_docker_registry_prefix" {
+variable "docker_registry_name" {
   type    = string
-  default = ""
+  default = "uidaimodels.azurecr.io"
 }
 
-# TODO: Pass Namespace Everywhere 
 variable "fabric_namespace" {
   type    = string
   default = "default"
 }
 
-# TODO: Pass service account everywhere 
 variable "fabric_service_account" {
   type    = string
   default = "default"

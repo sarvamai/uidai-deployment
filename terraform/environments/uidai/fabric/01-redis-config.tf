@@ -2,7 +2,7 @@ module "redis_config_maps" {
   source = "../../../modules/config-maps"
 
   name       = "redis-env"
-  namespaces = ["default"]
+  namespaces = [var.fabric_namespace]
   data = {
     "REDIS_HOST" = var.redis_host
     "REDIS_PORT" = var.redis_port
@@ -14,7 +14,7 @@ module "redis_secrets" {
   source = "../../../modules/secrets"
 
   name       = "redis-secrets"
-  namespaces = ["default"]
+  namespaces = [var.fabric_namespace]
   data = {
     "REDIS_PASSWORD" = {
       "value" = var.redis_password

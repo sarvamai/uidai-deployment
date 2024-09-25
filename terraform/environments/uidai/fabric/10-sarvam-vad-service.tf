@@ -18,13 +18,13 @@ module "sarvam_vad_service" {
   source = "../../../modules/deployment"
 
   name            = "sarvam-vad-service"
-  namespace       = "default"
-  service_account = "default"
+  namespace       = var.fabric_namespace
+  service_account = var.fabric_service_account
   containers = [
     {
       "env_from"          = local.sarvam_vad_service_env_from
       "env_vars"          = local.env_vars
-      "image"             = "gitopsdocker.azurecr.io/sarvam-vad-service"
+      "image"             = "${var.docker_registry_name}/sarvam-vad-service"
       "image_pull_policy" = "Always"
       "name"              = "sarvam-vad-service"
       "ports" = {

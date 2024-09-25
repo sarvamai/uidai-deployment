@@ -1,16 +1,16 @@
 resource "helm_release" "weaviate" {
 
   name      = "kb-weaviate"
-  namespace = "default"
+  namespace = var.fabric_namespace
 
-  repository = "../helm-charts/weaviate/weaviate"
-  chart      = "weaviate"
+  chart      = "../helm-charts/weaviate/weaviate"
 
   # force_update  = true
   recreate_pods = true
   reset_values  = true
 
   values = [<<EOF
+    serviceAccountName: ${var.fabric_service_account}
     replicas: 1
     EOF
   ]

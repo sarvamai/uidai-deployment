@@ -63,13 +63,13 @@ module "auth_service" {
   source = "../../../modules/deployment"
 
   name            = "auth-service"
-  namespace       = "default"
-  service_account = "default"
+  namespace       = var.fabric_namespace
+  service_account = var.fabric_service_account
   containers = [
     {
       "env_from"          = local.auth_service_env_from
       "env_vars"          = local.auth_service_env_vars
-      "image"             = "gitopsdocker.azurecr.io/auth-service"
+      "image"             = "${var.docker_registry_name}/auth-service"
       "image_pull_policy" = "Always"
       "name"              = "auth-service"
       "ports" = {

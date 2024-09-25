@@ -103,13 +103,13 @@ module "knowledge_base_authoring_service" {
   source = "../../../modules/deployment"
 
   name            = "knowledge-base-authoring-service"
-  namespace       = "default"
-  service_account = "default"
+  namespace       = var.fabric_namespace
+  service_account = var.fabric_service_account
   containers = [{
     "name"              = "knowledge-base-authoring-service"
     "env_from"          = local.kb_env_from
     "env_vars"          = local.kb_env_vars
-    "image"             = "gitopsdocker.azurecr.io/knowledge-base-service"
+    "image"             = "${var.docker_registry_name}/knowledge-base-service"
     "image_pull_policy" = "Always"
     "ports" = {
       "http" = {
@@ -164,13 +164,13 @@ module "knowledge_base_authoring_service_worker" {
   source = "../../../modules/deployment"
 
   name            = "knowledge-base-service-worker"
-  namespace       = "default"
-  service_account = "default"
+  namespace       = var.fabric_namespace
+  service_account = var.fabric_service_account
   containers = [{
     "name"              = "knowledge-base-service-worker"
     "env_from"          = local.kb_env_from
     "env_vars"          = local.kb_worker_env_vars
-    "image"             = "gitopsdocker.azurecr.io/knowledge-base-service"
+    "image"             = "${var.docker_registry_name}/knowledge-base-service"
     "image_pull_policy" = "Always"
     "resources" = {
       "requests" = {
@@ -217,13 +217,13 @@ module "knowledge_base_runtime_service" {
   source = "../../../modules/deployment"
 
   name            = "knowledge-base-service"
-  namespace       = "default"
-  service_account = "default"
+  namespace       = var.fabric_namespace
+  service_account = var.fabric_service_account
   containers = [{
     "name"              = "knowledge-base-service"
     "env_from"          = local.kb_env_from
     "env_vars"          = local.kb_query_service_env_vars
-    "image"             = "gitopsdocker.azurecr.io/knowledge-base-service"
+    "image"             = "${var.docker_registry_name}/knowledge-base-service"
     "image_pull_policy" = "Always"
     "ports" = {
       "http" = {

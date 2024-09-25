@@ -2,8 +2,8 @@ module "weaviate_env" {
   source = "../../../modules/config-maps"
 
   name       = "weaviate-env"
-  namespaces = ["default"]
+  namespaces = [var.fabric_namespace]
   data = {
-    "weaviate-url" = "http://weaviate.default"
+    "weaviate-url" = "http://weaviate.${var.fabric_namespace}"
   }
 }

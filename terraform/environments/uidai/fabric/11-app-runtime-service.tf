@@ -187,12 +187,12 @@ module "sarvam_app_runtime_svc" {
   source = "../../../modules/deployment"
 
   name            = "sarvam-app-runtime-service"
-  namespace       = "default"
-  service_account = "default"
+  namespace       = var.fabric_namespace
+  service_account = var.fabric_service_account
   containers = [{
     "env_from"          = local.sarvam_app_runtime_env_from
     "env_vars"          = local.sarvam_app_runtime_env_vars
-    "image"             = "gitopsdocker.azurecr.io/sarvam-app-runtime-service:v0.1.17"
+    "image"             = "${var.docker_registry_name}/sarvam-app-runtime-service:v0.1.17"
     "image_pull_policy" = "Always"
     "name"              = "sarvam-app-runtime-service"
     "ports" = {
