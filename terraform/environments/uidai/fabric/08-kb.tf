@@ -53,13 +53,21 @@ locals {
         "value" = "kb-db"
       }
       "HOSTED_EMBEDDING_URL" = {
-        "value" = "riva-combined-dev-service:8000"
+        "ref" = {
+          "key"    = "HOSTED_EMBEDDING_URL"
+          "name"   = local.model_urls_configmap_name
+          "source" = "configMapKeyRef"
+        }
       }
       "HOSTED_RERANKING_URL" = {
-        "value" = "riva-combined-dev-service:8000"
+        "ref" = {
+          "key"    = "HOSTED_RERANKING_URL"
+          "name"   = local.model_urls_configmap_name
+          "source" = "configMapKeyRef"
+        }
       }
       "KB_STORAGE_PATH" = {
-        "value" = "/mnt/pvc/kb-storage/knowledge-base"
+        "value" = "https://v2vh100storage.blob.core.windows.net/on-prem-test/knowledge-base/"
       }
       "WEAVIATE_URL" = {
         "ref" = {
@@ -110,15 +118,32 @@ module "knowledge_base_authoring_service" {
         "protocol"       = "TCP"
       }
     }
-    volume_mounts = {
-      "/mnt/pvc" = {
-        "name"      = "shared-pvc"
-        "read_only" = false
-      }
-    }
   }]
 
-  replicas = 1
+  hpa = {
+    "max_replicas" = 3
+    "min_replicas" = 1
+    "resource_metrics" = [
+      {
+        "name"         = "cpu"
+        "target_type"  = "Utilization"
+        "target_value" = "70"
+      },
+      {
+        "name"         = "memory"
+        "target_type"  = "Utilization"
+        "target_value" = "70"
+      },
+    ]
+    "pod_scale_up" = {
+      "value"          = 4
+      "period_seconds" = "30"
+    }
+    "pod_scale_down" = {
+      "value"          = 100
+      "period_seconds" = "30"
+    }
+  }
 
   kube_service_config = {
     "ports" = {
@@ -127,16 +152,9 @@ module "knowledge_base_authoring_service" {
         "target_port" = 8080
       }
     }
-    type = "LoadBalancer"
+    type = "ClusterIP"
   }
 
-  pvc_volume_name = "shared-pvc"
-
-  pvc_volume_def = {
-    "local-storage-pvc" = {
-      read_only = false
-    }
-  }
   gpu_toleration = true
 
 }
@@ -164,21 +182,30 @@ module "knowledge_base_authoring_service_worker" {
         "memory" = "3000Mi"
       }
     }
-    volume_mounts = {
-      "/mnt/pvc" = {
-        "name"      = "shared-pvc"
-        "read_only" = false
-      }
-    }
   }]
 
-  replicas = 1
-
-  pvc_volume_name = "shared-pvc"
-
-  pvc_volume_def = {
-    "local-storage-pvc" = {
-      read_only = false
+  hpa = {
+    "max_replicas" = 3
+    "min_replicas" = 1
+    "resource_metrics" = [
+      {
+        "name"         = "cpu"
+        "target_type"  = "Utilization"
+        "target_value" = "70"
+      },
+      {
+        "name"         = "memory"
+        "target_type"  = "Utilization"
+        "target_value" = "70"
+      },
+    ]
+    "pod_scale_up" = {
+      "value"          = 4
+      "period_seconds" = "30"
+    }
+    "pod_scale_down" = {
+      "value"          = 100
+      "period_seconds" = "30"
     }
   }
   gpu_toleration = true
@@ -216,16 +243,32 @@ module "knowledge_base_runtime_service" {
         "memory" = "3000Mi"
       }
     }
-
-    volume_mounts = {
-      "/mnt/pvc" = {
-        "name"      = "shared-pvc"
-        "read_only" = false
-      }
-    }
   }]
 
-  replicas = 1
+  hpa = {
+    "max_replicas" = 10
+    "min_replicas" = 1
+    "resource_metrics" = [
+      {
+        "name"         = "cpu"
+        "target_type"  = "Utilization"
+        "target_value" = "70"
+      },
+      {
+        "name"         = "memory"
+        "target_type"  = "Utilization"
+        "target_value" = "70"
+      },
+    ]
+    "pod_scale_up" = {
+      "value"          = 4
+      "period_seconds" = "30"
+    }
+    "pod_scale_down" = {
+      "value"          = 100
+      "period_seconds" = "30"
+    }
+  }
 
   kube_service_config = {
     "ports" = {
@@ -234,17 +277,9 @@ module "knowledge_base_runtime_service" {
         "target_port" = 8080
       }
     }
-    type = "LoadBalancer"
+    type = "ClusterIP"
   }
 
-  pvc_volume_name = "shared-pvc"
-
-  pvc_volume_def = {
-    "local-storage-pvc" = {
-      read_only = false
-    }
-  }
   gpu_toleration = true
-
 }
 

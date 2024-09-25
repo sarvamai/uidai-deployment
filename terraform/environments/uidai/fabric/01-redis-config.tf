@@ -4,9 +4,9 @@ module "redis_config_maps" {
   name       = "redis-env"
   namespaces = ["default"]
   data = {
-    "REDIS_HOST" = "redis-service"
-    "REDIS_PORT" = 6379
-    "REDIS_TLS"  = "false"
+    "REDIS_HOST" = var.redis_host
+    "REDIS_PORT" = var.redis_port
+    "REDIS_TLS"  = var.redis_tls
   }
 }
 
@@ -17,10 +17,10 @@ module "redis_secrets" {
   namespaces = ["default"]
   data = {
     "REDIS_PASSWORD" = {
-      "value" = "password"
+      "value" = var.redis_password
     }
     "REDIS_URL_PREFIX" = {
-      "value" = "redis://:password@redis-service:6379"
+      "value" = var.redis_url_prefix
     }
   }
 }

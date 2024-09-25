@@ -3,8 +3,7 @@ resource "helm_release" "weaviate" {
   name      = "kb-weaviate"
   namespace = "default"
 
-  # replce this with local helm charts path
-  repository = "https://weaviate.github.io/weaviate-helm/"
+  repository = "../helm-charts/weaviate/weaviate"
   chart      = "weaviate"
 
   # force_update  = true

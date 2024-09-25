@@ -1,45 +1,71 @@
-# POSTGRES
+# KB POSTGRES
 
-variable "postgres_host" {
+variable "kb_postgres_host" {
   type    = string
-  default = ""
+  default = "kb-postgres-service"
 }
 
-variable "postgres_port" {
+variable "kb_postgres_port" {
   type    = string
-  default = ""
+  default = "5432"
 }
 
-variable "postgres_user" {
+variable "kb_postgres_user" {
   type    = string
-  default = ""
+  default = "postgres"
 }
 
-variable "postgres_password" {
+variable "kb_postgres_password" {
   sensitive = true
-  default   = ""
+  default   = "password"
+}
+
+# AUTH POSTGRES
+
+variable "auth_postgres_host" {
+  type    = string
+  default = "auth-postgres-service"
+}
+
+variable "auth_postgres_port" {
+  type    = string
+  default = "5432"
+}
+
+variable "auth_postgres_user" {
+  type    = string
+  default = "postgres"
+}
+
+variable "auth_postgres_password" {
+  sensitive = true
+  default   = "password"
 }
 
 # REDIS
 
 variable "redis_host" {
   type    = string
-  default = ""
+  default = "redis-service"
 }
 
-variable "redis_ssl_port" {
+variable "redis_port" {
   type    = string
-  default = ""
+  default = "6379"
+}
+variable "redis_tls" {
+  type    = string
+  default = "false"
 }
 
 variable "redis_url_prefix" {
   type    = string
-  default = ""
+  default = "redis://:password@redis-service:6379"
 }
 
 variable "redis_password" {
   sensitive = true
-  default   = ""
+  default   = "password"
 }
 
 # Docker Image 

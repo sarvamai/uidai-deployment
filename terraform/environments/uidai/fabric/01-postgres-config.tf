@@ -4,9 +4,9 @@ module "kb_postgres_db_env" {
   name       = "kb-postgres-db-env"
   namespaces = ["default"]
   data = {
-    "DATABASE_HOST" = "kb-postgres-service"
-    "DATABASE_PORT" = 5432
-    "DATABASE_USER" = "postgres"
+    "DATABASE_HOST" = var.kb_postgres_host
+    "DATABASE_PORT" = var.kb_postgres_port
+    "DATABASE_USER" = var.kb_postgres_user
   }
 }
 
@@ -17,7 +17,7 @@ module "kb_postgres_db_secrets" {
   namespaces = ["default"]
   data = {
     "DATABASE_PASSWORD" = {
-      "value" = "password"
+      "value" = var.kb_postgres_password
     }
   }
 }
@@ -28,9 +28,9 @@ module "auth_postgres_db_env" {
   name       = "auth-postgres-db-env"
   namespaces = ["default"]
   data = {
-    "DATABASE_HOST" = "auth-postgres-service"
-    "DATABASE_PORT" = 5432
-    "DATABASE_USER" = "postgres"
+    "DATABASE_HOST" = var.auth_postgres_host
+    "DATABASE_PORT" = var.auth_postgres_port
+    "DATABASE_USER" = var.auth_postgres_user
   }
 }
 
@@ -41,7 +41,7 @@ module "auth_postgres_db_secrets" {
   namespaces = ["default"]
   data = {
     "DATABASE_PASSWORD" = {
-      "value" = "password"
+      "value" = var.auth_postgres_password
     }
   }
 }

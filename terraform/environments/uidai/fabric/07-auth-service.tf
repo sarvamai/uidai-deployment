@@ -54,7 +54,7 @@ locals {
     }
     "TOKEN_ACCESS_TOKEN_EXPIRE_MINUTES" = {
       "ref"   = null /* object */
-      "value" = "10080"
+      "value" = "10080" # 7 days
     }
   }
 }
@@ -75,7 +75,6 @@ module "auth_service" {
       "ports" = {
         "http" = {
           "container_port" = 8080
-          "port"           = 80
           "protocol"       = "TCP"
         }
       }
@@ -90,7 +89,22 @@ module "auth_service" {
     }
   ]
 
-  replicas = 1
+  hpa = {
+    "max_replicas" = 2
+    "min_replicas" = 1
+    "resource_metrics" = [
+      {
+        "name"         = "cpu"
+        "target_type"  = "Utilization"
+        "target_value" = "70"
+      },
+      {
+        "name"         = "memory"
+        "target_type"  = "Utilization"
+        "target_value" = "70"
+      },
+    ]
+  }
 
   kube_service_config = {
     "ports" = {
@@ -100,8 +114,8 @@ module "auth_service" {
         "target_port" = 8080
       }
     }
-    "type" = "LoadBalancer"
   }
+
   gpu_toleration = true
 }
 

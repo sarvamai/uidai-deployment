@@ -26,25 +26,53 @@ locals {
         value = "speech-whisper-batched-service:8000"
       }
       "LLAMAGUARD_URL" = {
-        value = "http://vllm-l3-1-sarvam-chat-tool-guard-service:8002/v1/chat/completions"
+        "ref" = {
+          "key"    = "LLAMAGUARD_URL"
+          "name"   = local.model_urls_configmap_name
+          "source" = "configMapKeyRef"
+        }
       }
       "SARVAM_OPENHATHI_URL" = {
-        value = "http://vllm-l3-translation-new-service:8000/v1/chat/completions"
+        "ref" = {
+          "key"    = "SARVAM_OPENHATHI_URL"
+          "name"   = local.model_urls_configmap_name
+          "source" = "configMapKeyRef"
+        }
       }
       "SARVAM_OPENHATHI_XLIT_URL" = {
-        value = "http://vllm-l3-translation-new-service:8002/v1/chat/completions"
+        "ref" = {
+          "key"    = "SARVAM_OPENHATHI_XLIT_URL"
+          "name"   = local.model_urls_configmap_name
+          "source" = "configMapKeyRef"
+        }
       }
       "SARVAM_TTS_URL" = {
-        value = "riva-combined-dev-service:8000"
+        "ref" = {
+          "key"    = "SARVAM_TTS_URL"
+          "name"   = local.model_urls_configmap_name
+          "source" = "configMapKeyRef"
+        }
       }
       "SARVAM_LLM_URL" = {
-        "value" = "http://nim-llama3-1-8b-service:8000/v1/chat/completions"
+        "ref" = {
+          "key"    = "SARVAM_LLM_URL"
+          "name"   = local.model_urls_configmap_name
+          "source" = "configMapKeyRef"
+        }
       }
       "SARVAM_LLM_LLAMA_3_1_8B_URL" = {
-        "value" = "http://nim-llama3-1-8b-service:8000/v1/chat/completions"
+        "ref" = {
+          "key"    = "SARVAM_LLM_LLAMA_3_1_8B_URL"
+          "name"   = local.model_urls_configmap_name
+          "source" = "configMapKeyRef"
+        }
       }
       "SARVAM_LLM_LLAMA_3_1_70B_URL" = {
-        "value" = "http://nim-llama3-1-8b-service:8000/v1/chat/completions"
+        "ref" = {
+          "key"    = "SARVAM_LLM_LLAMA_3_1_70B_URL"
+          "name"   = local.model_urls_configmap_name
+          "source" = "configMapKeyRef"
+        }
       }
       "SILERO_VAD_URL" = {
         "ref"   = null
@@ -93,7 +121,7 @@ locals {
         "value" = 6
       }
       "APP_STORAGE_URL" = {
-        "value" = "/mnt/pvc/app-storage/apps"
+        "value" = "https://v2vh100storage.blob.core.windows.net/on-prem-test/apps/"
       }
       "NUM_WORKERS" = {
         value = 1
@@ -112,7 +140,11 @@ locals {
         }
       }
       "TRITON_PROMPT_INJECTION_URL" = {
-        "value" = "riva-combined-dev-service:8000"
+        "ref" = {
+          "key"    = "TRITON_PROMPT_INJECTION_URL"
+          "name"   = local.model_urls_configmap_name
+          "source" = "configMapKeyRef"
+        }
       }
       "EXOTEL_START_SPEECH_VOLUME_THRESHOLD" = {
         "value" = -29
@@ -120,6 +152,33 @@ locals {
       "EXOTEL_FIRST_TURN_MIN_SPEECH_FRAMES" = {
         "value" = 5
       }
+      "SARVAM_TRANSLATE_URL" = {
+        "ref" = {
+          "key"    = "SARVAM_TRANSLATE_URL"
+          "name"   = local.model_urls_configmap_name
+          "source" = "configMapKeyRef"
+        }
+      }
+      "SARVAM_XLIT_URL" = {
+        "ref" = {
+          "key"    = "SARVAM_XLIT_URL"
+          "name"   = local.model_urls_configmap_name
+          "source" = "configMapKeyRef"
+        }
+      }
+      "SARVAM_XLIT_ROMAN_URL" = {
+        "ref" = {
+          "key"    = "SARVAM_XLIT_ROMAN_URL"
+          "name"   = local.model_urls_configmap_name
+          "source" = "configMapKeyRef"
+        }
+      }
+      # "SARVAM_LLM_LLAMA_3_1_8B_HF_NAME" = {
+      #   "value" = "/ext-mnt/trt_engines/Meta-Llama-3.1-8B-Instruct-a100-bf16-mxbsz96-isl2048-seq4096/bf16/1-gpu/"
+      # }
+      # "SARVAM_LLM_LLAMA_3_1_70B_HF_NAME" = {
+      #   "value" = "/ext-mnt/trt_engines/Meta-Llama-3.1-70B-Instruct-a100-bf16-mxbsz96-isl2048-seq4096/bf16/1-gpu/"
+      # }
   })
 
 }
@@ -133,7 +192,7 @@ module "sarvam_app_runtime_svc" {
   containers = [{
     "env_from"          = local.sarvam_app_runtime_env_from
     "env_vars"          = local.sarvam_app_runtime_env_vars
-    "image"             = "gitopsdocker.azurecr.io/sarvam-app-runtime-service:latest"
+    "image"             = "gitopsdocker.azurecr.io/sarvam-app-runtime-service:v0.1.17"
     "image_pull_policy" = "Always"
     "name"              = "sarvam-app-runtime-service"
     "ports" = {
@@ -147,28 +206,38 @@ module "sarvam_app_runtime_svc" {
     "resources" = {
       "requests" = {
         "cpu"    = "100m"
-        "memory" = "1Gi"
+        "memory" = "2Gi"
       }
       "limits" = {
         "cpu"    = "200m"
-        "memory" = "2Gi"
-      }
-    }
-    volume_mounts = {
-      "/mnt/pvc" = {
-        "name"      = "shared-pvc"
-        "read_only" = false
+        "memory" = "4Gi"
       }
     }
   }]
 
-  replicas = 1
 
-  pvc_volume_name = "shared-pvc"
-
-  pvc_volume_def = {
-    "local-storage-pvc" = {
-      read_only = false
+  hpa = {
+    "max_replicas" = 3
+    "min_replicas" = 3
+    "resource_metrics" = [
+      {
+        "name"         = "cpu"
+        "target_type"  = "Utilization"
+        "target_value" = "70"
+      },
+      {
+        "name"         = "memory"
+        "target_type"  = "Utilization"
+        "target_value" = "70"
+      },
+    ]
+    "pod_scale_up" = {
+      "value"          = 4
+      "period_seconds" = "30"
+    }
+    "pod_scale_down" = {
+      "value"          = 100
+      "period_seconds" = "30"
     }
   }
 
@@ -179,7 +248,7 @@ module "sarvam_app_runtime_svc" {
         "target_port" = 8080
       }
     }
-    type = "LoadBalancer"
+    type = "ClusterIP"
   }
   gpu_toleration = true
 

@@ -1,3 +1,4 @@
+# TODO: Remove this
 module "hugging_face_secret" {
   source = "../../../modules/secrets"
 
@@ -10,6 +11,7 @@ module "hugging_face_secret" {
   }
 }
 
+# TODO: Remove this
 module "azure_storage_secret" {
   source = "../../../modules/secrets"
 
@@ -28,6 +30,7 @@ module "azure_storage_secret" {
   }
 }
 
+# TODO: Remove this
 module "github_access_token" {
   source     = "../../../modules/secrets"
   name       = "github-access-token"
