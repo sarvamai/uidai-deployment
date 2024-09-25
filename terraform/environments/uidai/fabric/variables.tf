@@ -83,3 +83,8 @@ variable "fabric_service_account" {
   type    = string
   default = "default"
 }
+
+variable "models_namespace" {
+  type    = string
+  default = "default"
+}
