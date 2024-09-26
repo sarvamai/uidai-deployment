@@ -62,9 +62,11 @@ locals {
 module "auth_service" {
   source = "../../../modules/deployment"
 
-  name            = "auth-service"
-  namespace       = var.fabric_namespace
-  service_account = var.fabric_service_account
+  name                 = "auth-service"
+  namespace            = var.fabric_namespace
+  service_account      = var.fabric_service_account
+  node_selector_labels = var.node_selector_labels
+
   containers = [
     {
       "env_from"          = local.auth_service_env_from

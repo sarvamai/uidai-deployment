@@ -186,9 +186,11 @@ locals {
 module "sarvam_app_runtime_svc" {
   source = "../../../modules/deployment"
 
-  name            = "sarvam-app-runtime-service"
-  namespace       = var.fabric_namespace
-  service_account = var.fabric_service_account
+  name                 = "sarvam-app-runtime-service"
+  namespace            = var.fabric_namespace
+  service_account      = var.fabric_service_account
+  node_selector_labels = var.node_selector_labels
+  
   containers = [{
     "env_from"          = local.sarvam_app_runtime_env_from
     "env_vars"          = local.sarvam_app_runtime_env_vars

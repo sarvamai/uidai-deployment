@@ -102,9 +102,11 @@ locals {
 module "knowledge_base_authoring_service" {
   source = "../../../modules/deployment"
 
-  name            = "knowledge-base-authoring-service"
-  namespace       = var.fabric_namespace
-  service_account = var.fabric_service_account
+  name                 = "knowledge-base-authoring-service"
+  namespace            = var.fabric_namespace
+  service_account      = var.fabric_service_account
+  node_selector_labels = var.node_selector_labels
+
   containers = [{
     "name"              = "knowledge-base-authoring-service"
     "env_from"          = local.kb_env_from
@@ -163,9 +165,11 @@ module "knowledge_base_authoring_service" {
 module "knowledge_base_authoring_service_worker" {
   source = "../../../modules/deployment"
 
-  name            = "knowledge-base-service-worker"
-  namespace       = var.fabric_namespace
-  service_account = var.fabric_service_account
+  name                 = "knowledge-base-service-worker"
+  namespace            = var.fabric_namespace
+  service_account      = var.fabric_service_account
+  node_selector_labels = var.node_selector_labels
+
   containers = [{
     "name"              = "knowledge-base-service-worker"
     "env_from"          = local.kb_env_from
@@ -216,9 +220,11 @@ module "knowledge_base_authoring_service_worker" {
 module "knowledge_base_runtime_service" {
   source = "../../../modules/deployment"
 
-  name            = "knowledge-base-service"
-  namespace       = var.fabric_namespace
-  service_account = var.fabric_service_account
+  name                 = "knowledge-base-service"
+  namespace            = var.fabric_namespace
+  service_account      = var.fabric_service_account
+  node_selector_labels = var.node_selector_labels
+
   containers = [{
     "name"              = "knowledge-base-service"
     "env_from"          = local.kb_env_from

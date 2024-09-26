@@ -20,6 +20,8 @@ module "sarvam_vad_service" {
   name            = "sarvam-vad-service"
   namespace       = var.fabric_namespace
   service_account = var.fabric_service_account
+  node_selector_labels = var.node_selector_labels
+
   containers = [
     {
       "env_from"          = local.sarvam_vad_service_env_from

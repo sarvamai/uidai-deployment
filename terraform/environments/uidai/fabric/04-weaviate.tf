@@ -10,6 +10,8 @@ resource "helm_release" "weaviate" {
   reset_values  = true
 
   values = [<<EOF
+    nodeSelector:
+      ${yamlencode(var.node_selector_labels)}
     serviceAccountName: ${var.fabric_service_account}
     replicas: 1
     tolerations:
