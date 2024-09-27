@@ -172,22 +172,6 @@ variable "redis_tls" {
 }
 ```
 
-- Create a ConfigMap for Redis:
-
-```hcl
-module "redis_config_maps" {
-  source = "../../../modules/config-maps"
-
-  name       = "redis-env"
-  namespaces = [var.fabric_namespace]
-  data = {
-    "REDIS_HOST" = var.redis_host
-    "REDIS_PORT" = var.redis_port
-    "REDIS_TLS"  = var.redis_tls
-  }
-}
-```
-
 - Create a secret `redis-secrets` with the Redis password and URL:
 
 ```hcl
@@ -207,7 +191,10 @@ module "redis_secrets" {
 }
 ```
 
-### 3. Additional Secrets
+### 3. Ceph Setup
+- Create two buckets in the ceph cluster, `apps` and `knowledge-base`
+
+### 4. Additional Secrets
 
 You also need to create additional secrets for the authentication service:
 

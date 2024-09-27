@@ -67,7 +67,7 @@ locals {
         }
       }
       "KB_STORAGE_PATH" = {
-        "value" = "https://v2vh100storage.blob.core.windows.net/on-prem-test/knowledge-base/"
+        "value" = var.kb_storage_path
       }
       "WEAVIATE_URL" = {
         "ref" = {

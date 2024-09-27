@@ -97,3 +97,15 @@ variable "node_selector_labels" {
   }
   description = "Labels for selecting nodes to schedule pods of the deployment"
 }
+
+# Bucket name shoud be `knowledge-base`
+variable "kb_storage_path" {
+  type = string
+  default = "http://<ceph-cluster-ip>:<port>/knowledge-base/"
+}
+
+# Bucket name shoud be `apps`
+variable "app_storge_path" {
+  type = string
+  default = "http://<ceph-cluster-ip>:<port>/apps/"
+}
