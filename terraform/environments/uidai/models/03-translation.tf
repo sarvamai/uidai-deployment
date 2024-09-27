@@ -43,6 +43,7 @@ resource "kubernetes_deployment_v1" "vllm_l3_translation_new" {
 
       spec {
         service_account_name = var.models_service_account
+        node_selector = var.node_selector_labels
 
         volume {
           name = "dshm"

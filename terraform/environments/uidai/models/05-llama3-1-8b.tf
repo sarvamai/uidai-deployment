@@ -43,6 +43,7 @@ resource "kubernetes_deployment" "nim_llama3_1_8b" {
 
       spec {
         service_account_name = var.models_service_account
+        node_selector = var.node_selector_labels
 
         volume {
           name = "dshm"

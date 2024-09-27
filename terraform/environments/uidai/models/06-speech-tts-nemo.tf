@@ -39,7 +39,8 @@ resource "kubernetes_deployment" "speech_tts_nemo" {
 
       spec {
         service_account_name = var.models_service_account
-
+        node_selector = var.node_selector_labels
+        
         container {
           name              = "speech-tts-nemo-container"
           image             = "${var.docker_registry_name}/deployment-tts-triton:on-prem-v1"
