@@ -193,7 +193,5 @@ resource "kubernetes_service_v1" "vllm_llama_gaurd" {
       protocol    = "TCP"
       name        = "model1-port"
     }
-
-    type = "LoadBalancer"
   }
 }

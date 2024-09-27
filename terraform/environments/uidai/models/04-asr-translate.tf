@@ -214,7 +214,5 @@ resource "kubernetes_service_v1" "speech_whisper_batched_service" {
       protocol    = "TCP"
       name        = "metrics-port"
     }
-
-    type = "LoadBalancer"
   }
 }

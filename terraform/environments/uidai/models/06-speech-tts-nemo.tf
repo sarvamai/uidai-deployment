@@ -249,7 +249,5 @@ resource "kubernetes_service" "speech_tts_nemo_service" {
       protocol    = "TCP"
       name        = "metrics-port"
     }
-
-    type = "LoadBalancer"
   }
 }

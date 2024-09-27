@@ -192,7 +192,5 @@ resource "kubernetes_service_v1" "vllm_pre_tts" {
       protocol    = "TCP"
       name        = "model1-port"
     }
-
-    type = "LoadBalancer"
   }
 }

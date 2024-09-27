@@ -204,7 +204,5 @@ resource "kubernetes_service_v1" "nim_llama3_1_8b_service" {
       protocol    = "TCP"
       name        = "model2-port"
     }
-
-    type = "LoadBalancer"
   }
 }

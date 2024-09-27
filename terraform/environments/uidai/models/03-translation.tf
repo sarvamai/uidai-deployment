@@ -193,7 +193,5 @@ resource "kubernetes_service_v1" "vllm_l3_translation_new" {
       protocol    = "TCP"
       name        = "model1-port"
     }
-
-    type = "LoadBalancer"
   }
 }

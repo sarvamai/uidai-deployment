@@ -57,7 +57,7 @@ You can include the command to taint the node in your README under the **Node La
 
 ---
 
-## Node Labeling Setup
+## Node Setup
 
 To ensure that the pods are scheduled on specific nodes, you can apply labels to your nodes, taint the nodes, and configure the corresponding variable in your Terraform setup.
 
