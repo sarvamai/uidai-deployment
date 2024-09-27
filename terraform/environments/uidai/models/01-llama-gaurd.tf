@@ -63,7 +63,7 @@ resource "kubernetes_deployment_v1" "vllm_llama_gaurd" {
 
         container {
           name              = "vllm-llama-gaurd-container"
-          image             = "appsprodacr.azurecr.io/inference/llm/vllm-release:0.5.2.post1.dynlen"
+          image             = "${var.docker_registry_name}/vllm-release:0.5.2.post1.dynlen"
           image_pull_policy = "Always"
 
           volume_mount {

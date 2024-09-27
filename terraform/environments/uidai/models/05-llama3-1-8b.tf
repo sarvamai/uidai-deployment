@@ -63,7 +63,7 @@ resource "kubernetes_deployment" "nim_llama3_1_8b" {
 
         container {
           name              = "nim-llama3-1-8b-container"
-          image             = "appsprodacr.azurecr.io/inference/llm/nim/deployment-trt-llm-nim-release:v0.12.0.pre_json_decode_fixed3_with_engine_v2"
+          image             = "${var.docker_registry_name}/deployment-trt-llm-nim-release:v0.12.0.pre_json_decode_fixed3_with_engine_v2"
           image_pull_policy = "Always"
 
           startup_probe {

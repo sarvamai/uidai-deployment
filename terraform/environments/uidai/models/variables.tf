@@ -16,3 +16,9 @@ variable "node_selector_labels" {
   }
   description = "Labels for selecting nodes to schedule pods of the deployment"
 }
+
+# TODO: Docker Image 
+variable "docker_registry_name" {
+  type    = string
+  default = "uidaimodels.azurecr.io"
+}

@@ -42,7 +42,7 @@ resource "kubernetes_deployment" "speech_tts_nemo" {
 
         container {
           name              = "speech-tts-nemo-container"
-          image             = "appsprodacr.azurecr.io/inference/tts/deployment-tts-triton:on-prem-v1"
+          image             = "${var.docker_registry_name}/deployment-tts-triton:on-prem-v1"
           image_pull_policy = "Always"
 
           command = ["/bin/sh", "-c"] # Override the entrypoint with a shell

@@ -63,7 +63,7 @@ resource "kubernetes_deployment_v1" "vllm_l3_translation_new" {
 
         container {
           name              = "vllm-l3-translation-new-container"
-          image             = "appsprodacr.azurecr.io/inference/llm/vllm-release:0.5.2.post1.dynlen"
+          image             = "${var.docker_registry_name}/vllm-release:0.5.2.post1.dynlen"
           image_pull_policy = "Always"
 
           volume_mount {

@@ -65,7 +65,7 @@ resource "kubernetes_deployment_v1" "speech_whisper_batched" {
 
         container {
           name              = "speech-whisper-batched-container"
-          image             = "v2vcrh100.azurecr.io/inference/riva/deployment-whisper-triton-onprem:latest"
+          image             = "${var.docker_registry_name}/deployment-whisper-triton-onprem:latest"
           image_pull_policy = "Always"
           command           = ["/bin/sh", "-c"] # Override the entrypoint with a shell
           args              = ["tritonserver --metrics-interval-ms=1000 --model-repository=\"/data/models\""]
