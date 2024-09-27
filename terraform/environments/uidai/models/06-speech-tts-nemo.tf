@@ -1,7 +1,7 @@
 resource "kubernetes_deployment" "speech_tts_nemo" {
   metadata {
     name      = "speech-tts-nemo"
-    namespace = "default"
+    namespace = var.models_namespace
     labels = {
       app = "speech-tts-nemo"
     }
@@ -38,6 +38,8 @@ resource "kubernetes_deployment" "speech_tts_nemo" {
       }
 
       spec {
+        service_account_name = var.models_service_account
+
         container {
           name              = "speech-tts-nemo-container"
           image             = "appsprodacr.azurecr.io/inference/tts/deployment-tts-triton:on-prem-v1"
@@ -223,7 +225,7 @@ resource "kubernetes_deployment" "speech_tts_nemo" {
 resource "kubernetes_service" "speech_tts_nemo_service" {
   metadata {
     name      = "speech-tts-nemo-service"
-    namespace = "default"
+    namespace = var.models_namespace
     labels = {
       app = "speech-tts-nemo"
     }

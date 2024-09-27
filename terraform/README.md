@@ -53,6 +53,14 @@ Here’s the updated README with the section on node labeling and variable confi
 
 To ensure that the pods are scheduled on specific nodes, you can apply labels to your nodes and configure the corresponding variable in your Terraform setup.
 
+You can include the command to taint the node in your README under the **Node Labeling Setup** section. Here's the updated part of your README, including the taint command:
+
+---
+
+## Node Labeling Setup
+
+To ensure that the pods are scheduled on specific nodes, you can apply labels to your nodes, taint the nodes, and configure the corresponding variable in your Terraform setup.
+
 ### 1. Labeling the Node
    - Use `kubectl` to label the node you want to use for scheduling pods. For example, if you want to label a DGX node with the label `type=sarvam`, run:
 
@@ -62,7 +70,17 @@ To ensure that the pods are scheduled on specific nodes, you can apply labels to
 
    Replace `<dgx-node-name>` with the name of the node that you want to label.
 
-### 2. Node Selector in Terraform
+### 2. Tainting the Node
+   - To taint the node and prevent any pods from being scheduled unless they tolerate the taint, run the following command:
+
+   ```bash
+   kubectl taint nodes <dgx-node-name> sku=gpu:NoSchedule
+   ```
+
+   This command adds a taint with the key `sku`, value `gpu`, and effect `NoSchedule` to the specified node.
+
+
+### 3. Node Selector in Terraform
 
    - Update the `fabric/variables.tf` file to include the node selector labels. The default label `type=sarvam` will be used to schedule the pods on the labeled nodes:
 

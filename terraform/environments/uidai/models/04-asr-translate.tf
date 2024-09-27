@@ -2,7 +2,8 @@ resource "kubernetes_deployment_v1" "speech_whisper_batched" {
   depends_on = [module.hugging_face_secret, module.azure_storage_secret]
 
   metadata {
-    name = "speech-whisper-batched"
+    name      = "speech-whisper-batched"
+    namespace = var.models_namespace
     labels = {
       "app.kubernetes.io/name" = "speech-whisper-batched"
       "monitor"                = "tritonserver-speech"
@@ -36,13 +37,15 @@ resource "kubernetes_deployment_v1" "speech_whisper_batched" {
         }
 
         annotations = {
-          "prometheus.io/port"     = "8002"
-          "prometheus.io/path"     = "/metrics"
-          "prometheus.io/scrape"   = "true"
+          "prometheus.io/port"   = "8002"
+          "prometheus.io/path"   = "/metrics"
+          "prometheus.io/scrape" = "true"
         }
       }
 
       spec {
+        service_account_name = var.models_service_account
+
         volume {
           name = "dshm"
 
@@ -186,7 +189,8 @@ resource "kubernetes_deployment_v1" "speech_whisper_batched" {
 
 resource "kubernetes_service_v1" "speech_whisper_batched_service" {
   metadata {
-    name = "speech-whisper-batched-service"
+    name      = "speech-whisper-batched-service"
+    namespace = var.models_namespace
     labels = {
       "app.kubernetes.io/name" = "speech-whisper-batched"
     }

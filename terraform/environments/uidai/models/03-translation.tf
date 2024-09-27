@@ -2,7 +2,8 @@ resource "kubernetes_deployment_v1" "vllm_l3_translation_new" {
   depends_on = [module.hugging_face_secret, module.azure_storage_secret]
 
   metadata {
-    name = "vllm-l3-translation-new"
+    name      = "vllm-l3-translation-new"
+    namespace = var.models_namespace
     labels = {
       "app.kubernetes.io/name" = "vllm-l3-translation-new"
       "monitor"                = "vllm-server"
@@ -41,6 +42,8 @@ resource "kubernetes_deployment_v1" "vllm_l3_translation_new" {
       }
 
       spec {
+        service_account_name = var.models_service_account
+
         volume {
           name = "dshm"
 
@@ -172,7 +175,8 @@ resource "kubernetes_deployment_v1" "vllm_l3_translation_new" {
 
 resource "kubernetes_service_v1" "vllm_l3_translation_new" {
   metadata {
-    name = "vllm-l3-translation-new-service"
+    name      = "vllm-l3-translation-new-service"
+    namespace = var.models_namespace
     labels = {
       "app.kubernetes.io/name" = "vllm-l3-translation-new"
     }

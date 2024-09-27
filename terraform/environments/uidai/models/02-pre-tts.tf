@@ -2,7 +2,8 @@ resource "kubernetes_deployment_v1" "vllm_pre_tts" {
   depends_on = [module.hugging_face_secret, module.azure_storage_secret]
 
   metadata {
-    name = "vllm-pre-tts"
+    name      = "vllm-pre-tts"
+    namespace = var.models_namespace
     labels = {
       "app.kubernetes.io/name" = "vllm-pre-tts"
       "monitor"                = "vllm-server"
@@ -41,6 +42,7 @@ resource "kubernetes_deployment_v1" "vllm_pre_tts" {
       }
 
       spec {
+        service_account_name = var.models_service_account
         volume {
           name = "dshm"
 
@@ -172,7 +174,8 @@ resource "kubernetes_deployment_v1" "vllm_pre_tts" {
 
 resource "kubernetes_service_v1" "vllm_pre_tts" {
   metadata {
-    name = "vllm-pre-tts-service"
+    name      = "vllm-pre-tts-service"
+    namespace = var.models_namespace
     labels = {
       "app.kubernetes.io/name" = "vllm-pre-tts"
     }

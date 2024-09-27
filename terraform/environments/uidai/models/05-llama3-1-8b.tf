@@ -2,7 +2,7 @@ resource "kubernetes_deployment" "nim_llama3_1_8b" {
   depends_on = [module.github_access_token, module.hugging_face_secret]
   metadata {
     name      = "nim-llama3-1-8b"
-    namespace = "default"
+    namespace = var.models_namespace
     labels = {
       "app.kubernetes.io/name" = "nim-llama3-1-8b"
       "monitor"                = "tritonserver"
@@ -42,6 +42,8 @@ resource "kubernetes_deployment" "nim_llama3_1_8b" {
       }
 
       spec {
+        service_account_name = var.models_service_account
+
         volume {
           name = "dshm"
 
@@ -177,7 +179,8 @@ resource "kubernetes_deployment" "nim_llama3_1_8b" {
 
 resource "kubernetes_service_v1" "nim_llama3_1_8b_service" {
   metadata {
-    name = "nim-llama3-1-8b-service"
+    name      = "nim-llama3-1-8b-service"
+    namespace = var.models_namespace
     labels = {
       "app.kubernetes.io/name" = "nim-llama3-1-8b"
     }

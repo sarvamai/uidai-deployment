@@ -2,7 +2,8 @@ resource "kubernetes_deployment_v1" "vllm_llama_gaurd" {
   depends_on = [module.hugging_face_secret, module.azure_storage_secret]
 
   metadata {
-    name = "vllm-llama-gaurd"
+    name      = "vllm-llama-gaurd"
+    namespace = var.models_namespace
     labels = {
       "app.kubernetes.io/name" = "vllm-llama-gaurd"
       "monitor"                = "vllm-server"
@@ -41,6 +42,8 @@ resource "kubernetes_deployment_v1" "vllm_llama_gaurd" {
       }
 
       spec {
+        service_account_name = var.models_service_account
+
         volume {
           name = "dshm"
 
@@ -172,7 +175,8 @@ resource "kubernetes_deployment_v1" "vllm_llama_gaurd" {
 
 resource "kubernetes_service_v1" "vllm_llama_gaurd" {
   metadata {
-    name = "vllm-llama-gaurd-service"
+    name      = "vllm-llama-gaurd-service"
+    namespace = var.models_namespace
     labels = {
       "app.kubernetes.io/name" = "vllm-llama-gaurd"
     }
