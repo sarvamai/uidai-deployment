@@ -227,6 +227,8 @@ module "auth_shared_secrets" {
 
 2. **Auth Service Secrets:**
 
+You can generate the JWT secret keys using `openssl rand -base64 32`
+
 ```hcl
 module "auth_service_secrets" {
   source = "../../../modules/secrets"
@@ -240,7 +242,22 @@ module "auth_service_secrets" {
 }
 ```
 
-You can generate the JWT secret keys using `openssl rand -base64 32`.
+3. **Create a Kubernetes Secret for Ceph Credentials**
+
+- Create a Kubernetes secret named `ceph-secrets` for managing your access keys:
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+    name: ceph-secrets
+    namespace: <your-namespace>
+data:
+    AWS_ACCESS_KEY_ID: <base64-encoded-ceph-access-key>
+    AWS_SECRET_ACCESS_KEY: <base64-encoded-ceph-secret-key>
+```
+
+Replace `<base64-encoded-ceph-access-key>` and `<base64-encoded-ceph-secret-key>` with your Ceph access and secret keys, base64 encoded.
 
 ---
 
