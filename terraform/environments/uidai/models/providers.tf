@@ -14,12 +14,19 @@ terraform {
     }
   }
 
-  backend "local" {
-    path = "../../../tfstates/models.tfstate"
+  backend "s3" {
+    bucket                      = "my-ceph-bucket"
+    key                         = "models.tfstate"
+    region                      = "us-east-1"                    # Update with the region
+    endpoint                    = "http://ceph-cluster-url:port" # Your Ceph S3 endpoint
+    access_key                  = "your-ceph-access-key"
+    secret_key                  = "your-ceph-secret-key"
+    skip_credentials_validation = true # Required for Ceph
+    skip_region_validation      = true # Required for Ceph
   }
 }
 
 provider "kubernetes" {
-  config_path    = "~/.kube/config"
-  config_context = "v2v-cluster-h100"
+  config_path    = ""
+  config_context = ""
 }
