@@ -79,7 +79,12 @@ locals {
       "HUGGINGFACE_HUB_TOKEN" = {
         "value" = ""
       }
-
+      "AWS_ACCESS_KEY_ID" = {
+        "value" = var.aws_access_key_id
+      }
+      "AWS_SECRET_ACCESS_KEY" = {
+        "value" = var.aws_secret_access_key
+      }
   })
 
   kb_worker_env_vars = merge(local.kb_env_vars,

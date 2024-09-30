@@ -173,6 +173,12 @@ locals {
           "source" = "configMapKeyRef"
         }
       }
+      "AWS_ACCESS_KEY_ID" = {
+        "value" = var.aws_access_key_id
+      }
+      "AWS_SECRET_ACCESS_KEY" = {
+        "value" = var.aws_secret_access_key
+      }
       # "SARVAM_LLM_LLAMA_3_1_8B_HF_NAME" = {
       #   "value" = "/ext-mnt/trt_engines/Meta-Llama-3.1-8B-Instruct-a100-bf16-mxbsz96-isl2048-seq4096/bf16/1-gpu/"
       # }
@@ -190,7 +196,7 @@ module "sarvam_app_runtime_svc" {
   namespace            = var.fabric_namespace
   service_account      = var.fabric_service_account
   node_selector_labels = var.node_selector_labels
-  
+
   containers = [{
     "env_from"          = local.sarvam_app_runtime_env_from
     "env_vars"          = local.sarvam_app_runtime_env_vars

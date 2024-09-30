@@ -101,11 +101,22 @@ variable "node_selector_labels" {
 # Bucket name shoud be `knowledge-base`
 variable "kb_storage_path" {
   type = string
-  default = "http://<ceph-cluster-ip>:<port>/knowledge-base/"
+  default = "http://<ceph-cluster-ip>:<port>/knowledge-base"
 }
 
 # Bucket name shoud be `apps`
 variable "app_storge_path" {
   type = string
-  default = "http://<ceph-cluster-ip>:<port>/apps/"
+  default = "http://<ceph-cluster-ip>:<port>/apps"
+}
+
+# Ceph credentials
+variable "aws_access_key_id" {
+  type = string
+  default = "minioadmin"
+}
+
+variable "aws_secret_access_key" {
+  type = string
+  default = "minioadmin"
 }
