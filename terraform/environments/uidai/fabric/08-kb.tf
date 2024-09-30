@@ -111,7 +111,7 @@ module "knowledge_base_authoring_service" {
     "name"              = "knowledge-base-authoring-service"
     "env_from"          = local.kb_env_from
     "env_vars"          = local.kb_env_vars
-    "image"             = "${var.docker_registry_name}/knowledge-base-service"
+    "image"             = "${var.docker_registry_name}/knowledge-base-service:v0.1.93"
     "image_pull_policy" = "Always"
     "ports" = {
       "http" = {

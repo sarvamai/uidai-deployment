@@ -26,7 +26,7 @@ module "sarvam_vad_service" {
     {
       "env_from"          = local.sarvam_vad_service_env_from
       "env_vars"          = local.env_vars
-      "image"             = "${var.docker_registry_name}/sarvam-vad-service"
+      "image"             = "${var.docker_registry_name}/sarvam-vad-service:v0.1.2"
       "image_pull_policy" = "Always"
       "name"              = "sarvam-vad-service"
       "ports" = {

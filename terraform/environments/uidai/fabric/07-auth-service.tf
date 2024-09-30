@@ -71,7 +71,7 @@ module "auth_service" {
     {
       "env_from"          = local.auth_service_env_from
       "env_vars"          = local.auth_service_env_vars
-      "image"             = "${var.docker_registry_name}/auth-service"
+      "image"             = "${var.docker_registry_name}/auth-service:v0.2.2"
       "image_pull_policy" = "Always"
       "name"              = "auth-service"
       "ports" = {

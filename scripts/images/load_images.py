@@ -43,7 +43,7 @@ async def pull_image(
 ):
     await docker_login(registry, username, password)
 
-    # Pull the image 
+    # Pull the image
     full_image_name = f"{registry}/{image_name}:{image_tag}"
     logging.info(f"Pulling image {full_image_name} from {registry}")
     pull_command = f"docker pull {full_image_name}"
@@ -194,16 +194,21 @@ async def transfer_image(
 async def main():
     # List of images to transfer: (image_name, image_tag)
     images_to_transfer = [
-        ("load-testing-k8s", "v0.0.2"),
+        # ("sarvam-vad-service", "v0.1.2"),
+        # ("auth-service", "v0.2.2"),
+        # ("sarvam-app-runtime-service", "v0.1.35"),
+        ("knowledge-base-service", "v0.1.93"),
     ]
 
     source_registry = "gitopsdocker.azurecr.io"
-    target_registry = "v2vcrh100.azurecr.io"
+    target_registry = "uidaimodels.azurecr.io"
 
     # Run the transfer process asynchronously for all images
     await asyncio.gather(
-        *[transfer_image(image_name, image_tag, source_registry, target_registry)
-          for image_name, image_tag in images_to_transfer]
+        *[
+            transfer_image(image_name, image_tag, source_registry, target_registry)
+            for image_name, image_tag in images_to_transfer
+        ]
     )
 
 
