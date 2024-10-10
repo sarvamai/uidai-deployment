@@ -12,8 +12,8 @@ resource "kubernetes_horizontal_pod_autoscaler_v2" "main" {
 
     scale_target_ref {
       api_version = "apps/v1"
-      kind = try(var.hpa.scale_target_ref.kind, "Deployment")
-      name = try(var.hpa.scale_target_ref.name, local.deployment_name)
+      kind        = try(var.hpa.scale_target_ref.kind, "Deployment")
+      name        = try(var.hpa.scale_target_ref.name, local.deployment_name)
     }
 
     behavior {
@@ -21,6 +21,7 @@ resource "kubernetes_horizontal_pod_autoscaler_v2" "main" {
         for_each = var.hpa.pod_scale_down != null ? toset(["1"]) : toset([])
 
         content {
+          select_policy = "Max"
           policy {
             type           = "Pods"
             value          = var.hpa.pod_scale_down.value
@@ -33,6 +34,7 @@ resource "kubernetes_horizontal_pod_autoscaler_v2" "main" {
         for_each = var.hpa.pod_scale_up != null ? toset(["1"]) : toset([])
 
         content {
+          select_policy = "Max"
           policy {
             type           = "Pods"
             value          = var.hpa.pod_scale_up.value
@@ -70,9 +72,9 @@ resource "kubernetes_horizontal_pod_autoscaler_v2" "main" {
         resource {
           name = metric.value.name
           target {
-            type = metric.value.target_type
+            type                = metric.value.target_type
             average_utilization = metric.value.target_type == "Utilization" ? metric.value.target_value : null
-            average_value = metric.value.target_type == "AverageValue" ? metric.value.target_value : null
+            average_value       = metric.value.target_type == "AverageValue" ? metric.value.target_value : null
           }
         }
       }

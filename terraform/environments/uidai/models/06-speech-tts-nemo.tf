@@ -43,7 +43,7 @@ resource "kubernetes_deployment" "speech_tts_nemo" {
         
         container {
           name              = "speech-tts-nemo-container"
-          image             = "${var.docker_registry_name}/deployment-tts-triton:on-prem-v1"
+          image             = "${var.docker_registry_name}/inference/tts/deployment-tts-triton:on-prem-v2"
           image_pull_policy = "Always"
 
           command = ["/bin/sh", "-c"] # Override the entrypoint with a shell
@@ -54,44 +54,24 @@ resource "kubernetes_deployment" "speech_tts_nemo" {
             mount_path = "/dev/shm"
           }
 
-          volume_mount {
-            name       = "nfs-volume"
-            mount_path = "/nfs-mnt"
-          }
-
           env {
             name  = "HUGGING_FACE_HUB_TOKEN"
-            value = "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"
+            value = ""
           }
 
           env {
             name = "AZURE_CLIENT_ID"
-            value_from {
-              secret_key_ref {
-                name = "azure-storage-secret"
-                key  = "AZURE_CLIENT_ID"
-              }
-            }
+            value = ""
           }
 
           env {
             name = "AZURE_TENANT_ID"
-            value_from {
-              secret_key_ref {
-                name = "azure-storage-secret"
-                key  = "AZURE_TENANT_ID"
-              }
-            }
+            value = ""
           }
 
           env {
             name = "AZURE_CLIENT_SECRET"
-            value_from {
-              secret_key_ref {
-                name = "azure-storage-secret"
-                key  = "AZURE_CLIENT_SECRET"
-              }
-            }
+            value = ""
           }
 
           env {
@@ -209,15 +189,6 @@ resource "kubernetes_deployment" "speech_tts_nemo" {
             size_limit = "4Gi"
           }
         }
-
-        volume {
-          name = "nfs-volume"
-
-          persistent_volume_claim {
-            claim_name = "local-storage-pvc"
-          }
-        }
-
       }
     }
   }

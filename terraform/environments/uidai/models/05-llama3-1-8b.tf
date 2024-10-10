@@ -1,5 +1,5 @@
 resource "kubernetes_deployment" "nim_llama3_1_8b" {
-  depends_on = [module.github_access_token, module.hugging_face_secret]
+
   metadata {
     name      = "nim-llama3-1-8b"
     namespace = var.models_namespace
@@ -54,17 +54,9 @@ resource "kubernetes_deployment" "nim_llama3_1_8b" {
           }
         }
 
-        volume {
-          name = "nfs-volume"
-
-          persistent_volume_claim {
-            claim_name = "local-storage-pvc"
-          }
-        }
-
         container {
           name              = "nim-llama3-1-8b-container"
-          image             = "${var.docker_registry_name}/deployment-trt-llm-nim-release:v0.12.0.pre_json_decode_fixed3_with_engine_v2"
+          image             = "${var.docker_registry_name}/inference/llm/nim/deployment-trt-llm-nim-release:v0.12.0.onprem.fix"
           image_pull_policy = "Always"
 
           startup_probe {
@@ -117,7 +109,7 @@ resource "kubernetes_deployment" "nim_llama3_1_8b" {
 
           env {
             name  = "MODEL_PATH"
-            value = "/nfs-mnt/trt-nim/l3.1-8b-fp8-mxbs256-isl4096-seq4096/llama-3.1-8b/"
+            value = "/data/models/sarvam-nim-models/"
           }
 
           env {
@@ -127,32 +119,17 @@ resource "kubernetes_deployment" "nim_llama3_1_8b" {
 
           env {
             name = "HUGGING_FACE_HUB_TOKEN"
-            value_from {
-              secret_key_ref {
-                name = "hugging-face-secret"
-                key  = "HUGGING_FACE_HUB_TOKEN"
-              }
-            }
+            value = ""
           }
 
           env {
             name = "GITHUB_ACCESS_TOKEN"
-            value_from {
-              secret_key_ref {
-                name = "github-access-token"
-                key  = "GITHUB_ACCESS_TOKEN"
-              }
-            }
+            value = ""
           }
 
           volume_mount {
             name       = "dshm"
             mount_path = "/dev/shm"
-          }
-
-          volume_mount {
-            name       = "nfs-volume"
-            mount_path = "/mnt"
           }
 
           resources {
@@ -197,13 +174,6 @@ resource "kubernetes_service_v1" "nim_llama3_1_8b_service" {
       target_port = 8000
       protocol    = "TCP"
       name        = "model1-port"
-    }
-
-    port {
-      port        = 8002
-      target_port = 8002
-      protocol    = "TCP"
-      name        = "model2-port"
     }
   }
 }

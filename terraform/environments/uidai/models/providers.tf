@@ -15,18 +15,22 @@ terraform {
   }
 
   backend "s3" {
-    bucket                      = "my-ceph-bucket"
+    bucket                      = "test-bucket"
     key                         = "models.tfstate"
-    region                      = "us-east-1"                    # Update with the region
-    endpoint                    = "http://ceph-cluster-url:port" # Your Ceph S3 endpoint
-    access_key                  = "your-ceph-access-key"
-    secret_key                  = "your-ceph-secret-key"
-    skip_credentials_validation = true # Required for Ceph
-    skip_region_validation      = true # Required for Ceph
+    region                      = "some-region"                    # Update with the region
+    endpoint                    = "https://0382-45-117-30-6.ngrok-free.app" # Your Ceph S3 endpoint
+    access_key                  = "minioadmin"
+    secret_key                  = "minioadmin"
+    skip_credentials_validation = true                                     # Skip AWS credential validation
+    skip_region_validation      = true                                     # Skip AWS region validation
+    skip_metadata_api_check     = true                                     # Skip calls to AWS metadata API
+    skip_requesting_account_id  = true                                     # Skip retrieving AWS account details
+    force_path_style            = true                                     # Use path-style for Ceph/MinIO
+
   }
 }
 
 provider "kubernetes" {
-  config_path    = ""
-  config_context = ""
+  config_path    = "~/.kube/config"
+  config_context = "v2v-cluster-h100"
 }

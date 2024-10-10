@@ -1,5 +1,4 @@
 resource "kubernetes_deployment_v1" "vllm_l3_translation_new" {
-  depends_on = [module.hugging_face_secret, module.azure_storage_secret]
 
   metadata {
     name      = "vllm-l3-translation-new"
@@ -54,17 +53,9 @@ resource "kubernetes_deployment_v1" "vllm_l3_translation_new" {
           }
         }
 
-        volume {
-          name = "nfs-volume"
-
-          persistent_volume_claim {
-            claim_name = "local-storage-pvc"
-          }
-        }
-
         container {
           name              = "vllm-l3-translation-new-container"
-          image             = "${var.docker_registry_name}/vllm-release:0.5.2.post1.dynlen"
+          image             = "${var.docker_registry_name}/inference/llm/vllm-release-formal-eng-2-indic-2:0.5.2.post1.dynlen"
           image_pull_policy = "Always"
 
           volume_mount {
@@ -72,29 +63,14 @@ resource "kubernetes_deployment_v1" "vllm_l3_translation_new" {
             mount_path = "/dev/shm"
           }
 
-          volume_mount {
-            name       = "nfs-volume"
-            mount_path = "/nfs-mnt"
-          }
-
           env {
             name = "HUGGING_FACE_HUB_TOKEN"
-            value_from {
-              secret_key_ref {
-                name = "hugging-face-secret"
-                key  = "HUGGING_FACE_HUB_TOKEN"
-              }
-            }
-          }
-
-          env {
-            name  = "HF_HOME"
-            value = "/nfs-mnt/.cache"
+            value = ""
           }
 
           env {
             name  = "MODEL1"
-            value = "sarvam/translation-eng-2-code-mixed-indic"
+            value = "/workspace/sarvam/translation-eng-2-formal-indic-2"
           }
 
           env {
@@ -109,7 +85,7 @@ resource "kubernetes_deployment_v1" "vllm_l3_translation_new" {
 
           env {
             name  = "GPU_MEM_UTIL1"
-            value = "0.3"
+            value = "1.0"
           }
 
           env {

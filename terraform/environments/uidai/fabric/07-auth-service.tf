@@ -116,6 +116,7 @@ module "auth_service" {
         "target_port" = 8080
       }
     }
+    "type" = "LoadBalancer"
   }
 
   gpu_toleration = true

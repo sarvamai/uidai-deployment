@@ -51,8 +51,8 @@ module "sarvam_vad_service" {
   ]
 
   hpa = {
-    "max_replicas" = 5
-    "min_replicas" = 2
+    "max_replicas" = 1
+    "min_replicas" = 1
     "resource_metrics" = [
       {
         "name"         = "cpu"
