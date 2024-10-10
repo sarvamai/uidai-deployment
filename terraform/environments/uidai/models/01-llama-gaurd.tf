@@ -1,5 +1,4 @@
 resource "kubernetes_deployment_v1" "vllm_llama_gaurd" {
-  depends_on = [module.hugging_face_secret, module.azure_storage_secret]
 
   metadata {
     name      = "vllm-llama-gaurd"
@@ -54,17 +53,9 @@ resource "kubernetes_deployment_v1" "vllm_llama_gaurd" {
           }
         }
 
-        volume {
-          name = "nfs-volume"
-
-          persistent_volume_claim {
-            claim_name = "local-storage-pvc"
-          }
-        }
-
         container {
           name              = "vllm-llama-gaurd-container"
-          image             = "${var.docker_registry_name}/vllm-release:0.5.2.post1.dynlen"
+          image             = "${var.docker_registry_name}/inference/llm/vllm-release-llama-guard:0.5.2.post1.dynlen"
           image_pull_policy = "Always"
 
           volume_mount {
@@ -72,29 +63,14 @@ resource "kubernetes_deployment_v1" "vllm_llama_gaurd" {
             mount_path = "/dev/shm"
           }
 
-          volume_mount {
-            name       = "nfs-volume"
-            mount_path = "/nfs-mnt"
-          }
-
           env {
             name = "HUGGING_FACE_HUB_TOKEN"
-            value_from {
-              secret_key_ref {
-                name = "hugging-face-secret"
-                key  = "HUGGING_FACE_HUB_TOKEN"
-              }
-            }
-          }
-
-          env {
-            name  = "HF_HOME"
-            value = "/nfs-mnt/.cache"
+            value = ""
           }
 
           env {
             name  = "MODEL1"
-            value = "meta-llama/Llama-Guard-3-8B"
+            value = "/workspace/meta-llama/Llama-Guard-3-8B"
           }
 
           env {
@@ -109,7 +85,7 @@ resource "kubernetes_deployment_v1" "vllm_llama_gaurd" {
 
           env {
             name  = "GPU_MEM_UTIL1"
-            value = "0.3"
+            value = "1.0"
           }
 
           env {

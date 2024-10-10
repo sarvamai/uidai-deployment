@@ -1,5 +1,4 @@
 resource "kubernetes_deployment_v1" "speech_whisper_batched" {
-  depends_on = [module.hugging_face_secret, module.azure_storage_secret]
 
   metadata {
     name      = "speech-whisper-batched"
@@ -11,7 +10,7 @@ resource "kubernetes_deployment_v1" "speech_whisper_batched" {
   }
 
   spec {
-    replicas = 1
+    replicas = 3
 
     strategy {
       type = "RollingUpdate"
@@ -56,17 +55,9 @@ resource "kubernetes_deployment_v1" "speech_whisper_batched" {
           }
         }
 
-        volume {
-          name = "nfs-volume"
-
-          persistent_volume_claim {
-            claim_name = "local-storage-pvc"
-          }
-        }
-
         container {
           name              = "speech-whisper-batched-container"
-          image             = "${var.docker_registry_name}/deployment-whisper-triton-onprem:latest"
+          image             = "${var.docker_registry_name}/inference/riva/deployment-whisper-triton-onprem:v1-fix"
           image_pull_policy = "Always"
           command           = ["/bin/sh", "-c"] # Override the entrypoint with a shell
           args              = ["tritonserver --metrics-interval-ms=1000 --model-repository=\"/data/models\""]
@@ -75,49 +66,24 @@ resource "kubernetes_deployment_v1" "speech_whisper_batched" {
             mount_path = "/dev/shm"
           }
 
-          volume_mount {
-            name       = "nfs-volume"
-            mount_path = "/nfs-mnt"
-          }
-
           env {
             name = "HUGGING_FACE_HUB_TOKEN"
-            value_from {
-              secret_key_ref {
-                name = "hugging-face-secret"
-                key  = "HUGGING_FACE_HUB_TOKEN"
-              }
-            }
+            value = ""
           }
 
           env {
             name = "AZURE_CLIENT_ID"
-            value_from {
-              secret_key_ref {
-                name = "azure-storage-secret"
-                key  = "AZURE_CLIENT_ID"
-              }
-            }
+            value = ""
           }
 
           env {
             name = "AZURE_TENANT_ID"
-            value_from {
-              secret_key_ref {
-                name = "azure-storage-secret"
-                key  = "AZURE_TENANT_ID"
-              }
-            }
+            value = ""
           }
 
           env {
             name = "AZURE_CLIENT_SECRET"
-            value_from {
-              secret_key_ref {
-                name = "azure-storage-secret"
-                key  = "AZURE_CLIENT_SECRET"
-              }
-            }
+            value = ""
           }
 
           env {
