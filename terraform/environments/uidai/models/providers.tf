@@ -18,7 +18,7 @@ terraform {
     bucket                      = "test-bucket"
     key                         = "models.tfstate"
     region                      = "some-region"                    # Update with the region
-    endpoint                    = "https://0382-45-117-30-6.ngrok-free.app" # Your Ceph S3 endpoint
+    endpoint                    = "https://4f7c-202-83-19-72.ngrok-free.app" # Your Ceph S3 endpoint
     access_key                  = "minioadmin"
     secret_key                  = "minioadmin"
     skip_credentials_validation = true                                     # Skip AWS credential validation

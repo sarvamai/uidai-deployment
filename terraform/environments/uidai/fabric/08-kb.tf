@@ -128,7 +128,7 @@ module "knowledge_base_authoring_service" {
   }]
 
   hpa = {
-    "max_replicas" = 3
+    "max_replicas" = 1
     "min_replicas" = 1
     "resource_metrics" = [
       {
@@ -194,7 +194,7 @@ module "knowledge_base_authoring_service_worker" {
   }]
 
   hpa = {
-    "max_replicas" = 3
+    "max_replicas" = 1
     "min_replicas" = 1
     "resource_metrics" = [
       {
@@ -257,7 +257,7 @@ module "knowledge_base_runtime_service" {
   }]
 
   hpa = {
-    "max_replicas" = 10
+    "max_replicas" = 1
     "min_replicas" = 1
     "resource_metrics" = [
       {

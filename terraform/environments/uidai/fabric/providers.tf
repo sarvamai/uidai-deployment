@@ -20,18 +20,17 @@ terraform {
   }
 
     backend "s3" {
-    bucket                      = "test-bucket"
-    key                         = "fabric.tfstate"
-    region                      = "some-region"                    # Update with the region
-    endpoint                    = "https://0382-45-117-30-6.ngrok-free.app" # Your Ceph S3 endpoint
-    access_key                  = "minioadmin"
-    secret_key                  = "minioadmin"
-    skip_credentials_validation = true                                     # Skip AWS credential validation
-    skip_region_validation      = true                                     # Skip AWS region validation
-    skip_metadata_api_check     = true                                     # Skip calls to AWS metadata API
-    skip_requesting_account_id  = true                                     # Skip retrieving AWS account details
-    force_path_style            = true                                     # Use path-style for Ceph/MinIO
-
+      bucket                      = "test-bucket"
+      key                         = "fabric.tfstate"
+      region                      = "some-region"                    # Update with the region
+      endpoint                    = "https://4f7c-202-83-19-72.ngrok-free.app" # Your Ceph S3 endpoint
+      access_key                  = "minioadmin"
+      secret_key                  = "minioadmin"
+      skip_credentials_validation = true                                     # Skip AWS credential validation
+      skip_region_validation      = true                                     # Skip AWS region validation
+      skip_metadata_api_check     = true                                     # Skip calls to AWS metadata API
+      skip_requesting_account_id  = true                                     # Skip retrieving AWS account details
+      force_path_style            = true                                     # Use path-style for Ceph/MinIO
   }
 }
 

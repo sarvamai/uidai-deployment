@@ -257,8 +257,8 @@ module "sarvam_app_runtime_svc" {
 
 
   hpa = {
-    "max_replicas" = 3
-    "min_replicas" = 3
+    "max_replicas" = 1
+    "min_replicas" = 1
     "resource_metrics" = [
       {
         "name"         = "cpu"
