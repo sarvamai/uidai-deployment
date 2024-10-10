@@ -101,13 +101,13 @@ variable "node_selector_labels" {
 # Bucket name shoud be `knowledge-base`
 variable "kb_storage_path" {
   type = string
-  default = "https://0382-45-117-30-6.ngrok-free.app/knowledge-base"
+  default = "https://<ceph-storgae-url>/knowledge-base"
 }
 
 # Bucket name shoud be `apps`
 variable "app_storge_path" {
   type = string
-  default = "https://0382-45-117-30-6.ngrok-free.app/test-bucket/app-storage/apps"
+  default = "https://<ceph-storgae-url>/test-bucket/app-storage/apps"
 }
 
 # Ceph credentials

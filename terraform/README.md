@@ -180,6 +180,23 @@ variable "redis_password" {
 ### 3. Ceph Setup
 - Create two buckets in the ceph cluster, `apps` and `knowledge-base`
 
+update the `fabric/variables.tf`, and replace the <ceph-storgae-url> in following variables.
+
+
+```
+variable "kb_storage_path" {
+  type = string
+  default = "https://<ceph-storgae-url>/knowledge-base"
+}
+```
+
+```
+# Bucket name shoud be `apps`
+variable "app_storge_path" {
+  type = string
+  default = "https://<ceph-storgae-url>/app-storage/apps"
+}
+```
 ---
 
 ## Installation Steps
