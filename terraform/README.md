@@ -36,24 +36,15 @@ Here’s the updated README with the section on node labeling and variable confi
 
    ```hcl
    backend "s3" {
-     bucket                      = "my-ceph-bucket"
+     bucket                      = "my-ceph-bucket"       # Bucket name to store the tf state files.
      key                         = "fabric.tfstate"
-     region                      = "us-east-1"                    # Ceph usually requires a region.
+     region                      = "some region"                    
      endpoint                    = "http://ceph-cluster-url:port"  # Your Ceph S3 endpoint.
      access_key                  = "your-ceph-access-key"
      secret_key                  = "your-ceph-secret-key"
-     skip_credentials_validation = true  # Required for Ceph compatibility.
-     skip_region_validation      = true  # Required for Ceph compatibility.
+    ...
    }
    ```
-
----
-
-## Node Labeling Setup
-
-To ensure that the pods are scheduled on specific nodes, you can apply labels to your nodes and configure the corresponding variable in your Terraform setup.
-
-You can include the command to taint the node in your README under the **Node Labeling Setup** section. Here's the updated part of your README, including the taint command:
 
 ---
 
@@ -82,7 +73,7 @@ To ensure that the pods are scheduled on specific nodes, you can apply labels to
 
 ### 3. Node Selector in Terraform
 
-   - Update the `fabric/variables.tf` file to include the node selector labels. The default label `type=sarvam` will be used to schedule the pods on the labeled nodes:
+   - Update the `fabric/variables.tf` file to include the node selector labels. The default label `type=sarvam` will be used to schedule the pods on the labeled nodes, You can ignore if node labeled as sarvam, or change the variable value in models and fabric to the one set for the DGX node.
 
    ```hcl
    variable "node_selector_labels" {
@@ -107,63 +98,48 @@ You need to set up two PostgreSQL databases:
   - `kb-db`
   - `auth-db`
 
-For these databases, create Kubernetes secrets:
+- Update the `fabric/variables.tf` file with the Redis details:
 
-1. **Secret for `kb-db`:**
-
-```yaml
-apiVersion: v1
-kind: Secret
-metadata:
-  name: kb-postgres-db-secrets
-  namespace: <your-namespace>
-data:
-  DATABASE_PASSWORD: <base64-encoded-password-for-kb-db>
-```
-
-2. **Secret for `auth-db`:**
-
-```yaml
-apiVersion: v1
-kind: Secret
-metadata:
-  name: auth-postgres-db-secrets
-  namespace: <your-namespace>
-data:
-  DATABASE_PASSWORD: <base64-encoded-password-for-auth-db>
-```
-
-After creating the secrets, update the `fabric/variables.tf` file with PostgreSQL details:
 
 ```hcl
 variable "kb_postgres_host" {
   type    = string
-  default = "kb-postgres-service"
+  default = "kb-postgres-service"  # Host url of postgres
 }
 
 variable "kb_postgres_port" {
   type    = string
-  default = "5432"
+  default = "5432"  # Port to connect with postgres db
 }
 
 variable "kb_postgres_user" {
   type    = string
-  default = "postgres"
+  default = "postgres"   # Username for postgres user 
+}
+
+variable "kb_postgres_password" {
+  sensitive = true
+  default   = "password"  # Passowrd for postgres user 
 }
 
 variable "auth_postgres_host" {
   type    = string
-  default = "auth-postgres-service"
+  default = "auth-postgres-service"  # Host url of postgres
 }
 
 variable "auth_postgres_port" {
   type    = string
-  default = "5432"
+  default = "5432"  # Port to connect with postgres db
 }
 
 variable "auth_postgres_user" {
   type    = string
-  default = "postgres"
+  default = "postgres"   # Username for postgres user 
+}
+
+variable "auth_postgres_password" {
+  sensitive = true
+  default   = "password"  # Passowrd for postgres user 
 }
 ```
 
@@ -186,106 +162,69 @@ variable "redis_port" {
 
 variable "redis_tls" {
   type    = string
-  default = "false"
+  default = "true"   # true if ssl enabled
 }
-```
 
-- Create a secret `redis-secrets` with the Redis password and URL:
-
-```hcl
-module "redis_secrets" {
-  source = "../../../modules/secrets"
-
-  name       = "redis-secrets"
-  namespaces = [var.fabric_namespace]
-  data = {
-    "REDIS_PASSWORD" = {
-      "value" = "redis-password"
-    }
-    "REDIS_URL_PREFIX" = {
-      "value" = "redis://:password@redis-service:6379"
-    }
-  }
+variable "redis_url_prefix" {
+  type    = string
+  default = "rediss://:password@redis-service:6379" # Your redis url with password
 }
+
+variable "redis_password" {
+  sensitive = true
+  default   = "password" # rediss password
+}
+
 ```
 
 ### 3. Ceph Setup
 - Create two buckets in the ceph cluster, `apps` and `knowledge-base`
 
-### 4. Additional Secrets
-
-You also need to create additional secrets for the authentication service:
-
-1. **Shared Auth Secrets:**
-
-```hcl
-module "auth_shared_secrets" {
-  source = "../../../modules/secrets"
-
-  name       = "auth-shared-secrets"
-  namespaces = [var.fabric_namespace]
-  data = {
-    "TOKEN_JWT_SECRET_ACCESS_KEY" = "your-secret-access-key"
-  }
-}
-```
-
-2. **Auth Service Secrets:**
-
-You can generate the JWT secret keys using `openssl rand -base64 32`
-
-```hcl
-module "auth_service_secrets" {
-  source = "../../../modules/secrets"
-
-  name       = "auth-service-secrets"
-  namespaces = [var.fabric_namespace]
-  data = {
-    "FIRST_USER_PASSWORD" = "admin-password"
-    "TOKEN_JWT_SECRET_REFRESH_KEY" = "your-secret-refresh-key"
-  }
-}
-```
-
-3. **Create a Kubernetes Secret for Ceph Credentials**
-
-- Create a Kubernetes secret named `ceph-secrets` for managing your access keys:
-
-```yaml
-apiVersion: v1
-kind: Secret
-metadata:
-    name: ceph-secrets
-    namespace: <your-namespace>
-data:
-    AWS_ACCESS_KEY_ID: <base64-encoded-ceph-access-key>
-    AWS_SECRET_ACCESS_KEY: <base64-encoded-ceph-secret-key>
-```
-
-Replace `<base64-encoded-ceph-access-key>` and `<base64-encoded-ceph-secret-key>` with your Ceph access and secret keys, base64 encoded.
-
 ---
 
 ## Installation Steps
 
-1. **Change directory to the `fabric/` folder:**
+1. **Unzip the Providers**
+  This is present inside terraform folder
+  ```
+  tar xvzf providers.tar.gz
+  ```
+
+2. **Configure Terraform to Use Unzipped Providers:**
+  Create or update the ~/.terraformrc file to point to the unzipped providers:
+  ```hcl
+  provider_installation {
+    filesystem_mirror {
+      path    = "path to unzipped providers"
+    }
+  }
+  ```
+3. **Change directory to the `fabric/` folder:**
 
    ```bash
    cd fabric/
    ```
 
-2. **Initialize Terraform:**
+4. **Initialize Terraform:**
 
    ```bash
    terraform init
    ```
 
-3. **Apply the Terraform configuration:**
+5. **Apply the Terraform configuration:**
 
    ```bash
    terraform apply
    ```
 
-4. **Confirm the changes by typing `yes` when prompted.**
+6. **Confirm the changes by typing `yes` when prompted.**
 
-This will create the necessary infrastructure, including Kubernetes resources, ConfigMaps, Secrets, and more.
+7. **Do the same steps to host models on cluster**
+
+    NOTE: Do the same steps from 3-6 for `models` directory to host all the models.
+
+    ```
+    cd models/
+    terraform init
+    terraform apply
+    ```
