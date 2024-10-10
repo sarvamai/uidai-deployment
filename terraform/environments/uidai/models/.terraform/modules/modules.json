@@ -1,1 +1,0 @@
-{"Modules":[{"Key":"","Source":"","Dir":"."},{"Key":"azure_storage_secret","Source":"../../../modules/secrets","Dir":"../../../modules/secrets"},{"Key":"github_access_token","Source":"../../../modules/secrets","Dir":"../../../modules/secrets"},{"Key":"hugging_face_secret","Source":"../../../modules/secrets","Dir":"../../../modules/secrets"}]}

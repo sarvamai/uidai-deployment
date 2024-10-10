@@ -5,6 +5,7 @@
 # Local .terraform directories
 .terraform/
 
+providers/
 # Crash log files
 crash.log
 crash.*.log
