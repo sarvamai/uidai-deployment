@@ -121,7 +121,7 @@ locals {
         "value" = 6
       }
       "APP_STORAGE_URL" = {
-        "value" = "https://v2vh100storage.blob.core.windows.net/on-prem-test/apps/"
+        "value" = var.app_storge_path
       }
       "NUM_WORKERS" = {
         value = 1
@@ -159,7 +159,21 @@ locals {
           "source" = "configMapKeyRef"
         }
       }
+      "SARVAM_FORMAL_TRANSLATE_URL" = {
+        "ref" = {
+          "key"    = "SARVAM_TRANSLATE_URL"
+          "name"   = local.model_urls_configmap_name
+          "source" = "configMapKeyRef"
+        }
+      }
       "SARVAM_XLIT_URL" = {
+        "ref" = {
+          "key"    = "SARVAM_XLIT_URL"
+          "name"   = local.model_urls_configmap_name
+          "source" = "configMapKeyRef"
+        }
+      }
+      "SARVAM_FORMAL_XLIT_URL" = {
         "ref" = {
           "key"    = "SARVAM_XLIT_URL"
           "name"   = local.model_urls_configmap_name
@@ -179,12 +193,30 @@ locals {
       "AWS_SECRET_ACCESS_KEY" = {
         "value" = var.aws_secret_access_key
       }
-      # "SARVAM_LLM_LLAMA_3_1_8B_HF_NAME" = {
-      #   "value" = "/ext-mnt/trt_engines/Meta-Llama-3.1-8B-Instruct-a100-bf16-mxbsz96-isl2048-seq4096/bf16/1-gpu/"
-      # }
-      # "SARVAM_LLM_LLAMA_3_1_70B_HF_NAME" = {
-      #   "value" = "/ext-mnt/trt_engines/Meta-Llama-3.1-70B-Instruct-a100-bf16-mxbsz96-isl2048-seq4096/bf16/1-gpu/"
-      # }
+      "SARVAM_TRANSLATE_MODEL_NAME" = {
+        "value" = "/workspace/sarvam/translation-eng-2-formal-indic-2"
+      }
+      "SARVAM_FORMAL_TRANSLATE_MODEL_NAME" = {
+        "value" = "/workspace/sarvam/translation-eng-2-formal-indic-2"
+      }
+      "SARVAM_XLIT_MODEL_NAME" = {
+        "value" = "/workspace/sarvam/transliteration-pre-tts-eng-2-indic"
+      }
+      "SARVAM_FORMAL_XLIT_MODEL_NAME" = {
+        "value" = "/workspace/sarvam/transliteration-pre-tts-eng-2-indic"
+      }
+      "SARVAM_LLM_LLAMA_3_1_8B_HF_NAME" = {
+        "value" = "/data/models/sarvam-nim-models/"
+      }
+      "SARVAM_LLM_LLAMA_3_1_70B_HF_NAME" = {
+        "value" = "/data/models/sarvam-nim-models/"
+      }
+      "LLAMAGUARD_HF_NAME" = {
+        "value" = "/workspace/meta-llama/Llama-Guard-3-8B"
+      }
+      "SARVAM_PERSONAL_RECORD_SERVICE_URL" = {
+        "value" = "http://auth-service"
+      }
   })
 
 }
@@ -200,7 +232,7 @@ module "sarvam_app_runtime_svc" {
   containers = [{
     "env_from"          = local.sarvam_app_runtime_env_from
     "env_vars"          = local.sarvam_app_runtime_env_vars
-    "image"             = "${var.docker_registry_name}/sarvam-app-runtime-service:v0.1.35"
+    "image"             = "${var.docker_registry_name}/sarvam-app-runtime-service:v0.0.108-test"
     "image_pull_policy" = "Always"
     "name"              = "sarvam-app-runtime-service"
     "ports" = {
@@ -256,7 +288,7 @@ module "sarvam_app_runtime_svc" {
         "target_port" = 8080
       }
     }
-    type = "ClusterIP"
+    type = "LoadBalancer"
   }
   gpu_toleration = true
 
