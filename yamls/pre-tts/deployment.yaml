@@ -75,4 +75,16 @@ spec:
           periodSeconds: 30
         ports:
         - name: model1-port
-          containerPort: ​⬤
+          containerPort: 8000
+        resources:
+          limits:
+            nvidia.com/gpu: "1"
+          requests:
+            cpu: "1000m"
+            memory: "20Gi"
+            nvidia.com/gpu: "1"
+      tolerations:
+      - key: sku
+        operator: Equal
+        value: gpu
+        effect: NoSchedule
