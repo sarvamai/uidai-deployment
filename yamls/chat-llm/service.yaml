@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nim-llama3-1-8b-service
+  namespace: sarvam
+  labels:
+    app.kubernetes.io/name: nim-llama3-1-8b
+spec:
+  selector:
+    app.kubernetes.io/name: nim-llama3-1-8b
+  ports:
+  - port: 8000
+    targetPort: 8000
+    protocol: TCP
+    name: model1-port

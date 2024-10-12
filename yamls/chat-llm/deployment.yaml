@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nim-llama3-1-8b
+  namespace: sarvam
+  labels:
+    app.kubernetes.io/name: nim-llama3-1-8b
+    monitor: tritonserver
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: nim-llama3-1-8b
+      monitor: tritonserver
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: nim-llama3-1-8b
+        monitor: tritonserver
+      annotations:
+        prometheus.io/port: "8000"
+        prometheus.io/path: "/metrics"
+        prometheus.io/scrape: "true"
+    spec:
+      serviceAccountName: default
+      nodeSelector:
+        type: sarvam
+      volumes:
+      - name: dshm
+        emptyDir:
+          medium: Memory
+          sizeLimit: 16Gi
+      containers:
+      - name: nim-llama3-1-8b-container
+        image: "harbor-registry-prod.uidai.gov.in/sarvam/inference/llm/nim/deployment-trt-llm-nim-release:v0.12.0.onprem.fix"
+        imagePullPolicy: Always
+        startupProbe:
+          httpGet:
+            path: /v1/health/ready
+            port: 8000
+          initialDelaySeconds: 0
+          periodSeconds: 20
+          failureThreshold: 500
+        readinessProbe:
+          httpGet:
+            path: /v1/health/ready
+            port: 8000
+          initialDelaySeconds: 0
+          periodSeconds: 30
+        livenessProbe:
+          httpGet:
+            path: /v1/health/live
+            port: 8000
+          initialDelaySeconds: 0
+          periodSeconds: 30
+        ports:
+        - name: metrics-port
+          containerPort: 8000
+        - name: grpc-port
+          containerPort: 8001
+        env:
+        - name: PYTHONIOENCODING
+          value: "utf-8"
+        - name: PYTHONUNBUFFERED
+          value: "1"
+        - name: MODEL_PATH
+          value: "/data/models/sarvam-nim-models/"
+        - name: TP_SIZE
+          value: "1"
+        - name: HUGGING_FACE_HUB_TOKEN
+          value: ""
+        - name: GITHUB_ACCESS_TOKEN
+          value: ""
+        volumeMounts:
+        - name: dshm
+          mountPath: /dev/shm
+        resources:
+          limits:
+            nvidia.com/gpu: "1"
+          requests:
+            cpu: "1000m"
+            nvidia.com/gpu: "1"
+      tolerations:
+      - key: sku
+        operator: Equal
+        value: gpu
+        effect: NoSchedule

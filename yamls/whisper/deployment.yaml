@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: speech-whisper-batched
+  namespace: sarvam
+  labels:
+    app.kubernetes.io/name: speech-whisper-batched
+    monitor: tritonserver-speech
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 4
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: speech-whisper-batched
+      monitor: tritonserver-speech
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: speech-whisper-batched
+        monitor: tritonserver-speech
+      annotations:
+        prometheus.io/port: "8002"
+        prometheus.io/path: "/metrics"
+        prometheus.io/scrape: "true"
+    spec:
+      serviceAccountName: default
+      nodeSelector:
+        type: sarvam
+      volumes:
+      - name: dshm
+        emptyDir:
+          medium: Memory
+          sizeLimit: 4Gi
+      containers:
+      - name: speech-whisper-batched-container
+        image: "harbor-registry-prod.uidai.gov.in/sarvam/inference/riva/deployment-whisper-triton-onprem:v1-fix"
+        imagePullPolicy: Always
+        command: ["/bin/sh", "-c"]
+        args: ["tritonserver --metrics-interval-ms=1000 --model-repository=\"/data/models\""]
+        volumeMounts:
+        - name: dshm
+          mountPath: /dev/shm
+        env:
+        - name: HUGGING_FACE_HUB_TOKEN
+          value: ""
+        - name: AZURE_CLIENT_ID
+          value: ""
+        - name: AZURE_TENANT_ID
+          value: ""
+        - name: AZURE_CLIENT_SECRET
+          value: ""
+        - name: PYTHONIOENCODING
+          value: "utf-8"
+        - name: PYTHONUNBUFFERED
+          value: "1"
+        - name: CONTAINER_METADATA
+          value: "whisper-release-batched-0.1.2.json"
+        - name: WHISPER_HI_HF_MODEL_NAME
+          value: "/data/models/whisper-ml-hf/1/saaras_0_11"
+        - name: LD_LIBRARY_PATH
+          value: "/opt/riva/lib/:/opt/tritonserver/backends/pytorch/"
+        - name: IMAGE_TYPE
+          value: "riva"
+        - name: NFS_BASE_PATH
+          value: "/nfs-mnt"
+        resources:
+          limits:
+            nvidia.com/gpu: "1"
+          requests:
+            cpu: "1000m"
+            memory: "4Gi"
+            nvidia.com/gpu: "1"
+        ports:
+        - name: health-port
+          containerPort: 8000
+        - name: metrics-port
+          containerPort: 8002
+      tolerations:
+      - key: sku
+        operator: Equal
+        value: gpu
+        effect: NoSchedule

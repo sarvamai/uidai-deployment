@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: speech-whisper-batched-service
+  namespace: sarvam
+  labels:
+    app.kubernetes.io/name: speech-whisper-batched
+spec:
+  selector:
+    app.kubernetes.io/name: speech-whisper-batched
+  ports:
+  - port: 8000
+    targetPort: 8000
+    protocol: TCP
+    name: health-port
+  - port: 8002
+    targetPort: 8002
+    protocol: TCP
+    name: metrics-port
