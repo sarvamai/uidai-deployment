@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vllm-pre-tts
+  namespace: sarvam
+  labels:
+    app.kubernetes.io/name: vllm-pre-tts
+    monitor: vllm-server
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 4
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: vllm-pre-tts
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: vllm-pre-tts
+        monitor: vllm-server
+      annotations:
+        prometheus.io/port: "8000"
+        prometheus.io/path: "/metrics"
+        prometheus.io/scrape: "true"
+    spec:
+      serviceAccountName: default
+      nodeSelector:
+        type: sarvam
+      volumes:
+      - name: dshm
+        emptyDir:
+          medium: Memory
+          sizeLimit: 40Gi
+      containers:
+      - name: vllm-pre-tts-container
+        image: "harbor-registry-prod.uidai.gov.in/sarvam/inference/llm/vllm-release-pre-tts:0.5.2.post1.dynlen"
+        imagePullPolicy: Always
+        volumeMounts:
+        - name: dshm
+          mountPath: /dev/shm
+        env:
+        - name: HUGGING_FACE_HUB_TOKEN
+          value: ""
+        - name: MODEL1
+          value: "/workspace/sarvam/transliteration-pre-tts-eng-2-indic"
+        - name: REVISION1
+          value: "v3.1"
+        - name: GPU_MEM_UTIL1
+          value: "1.0"
+        - name: PORT1
+          value: "8000"
+        - name: MAX_MODEL_LEN1
+          value: "4096"
+        startupProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 0
+          periodSeconds: 20
+          failureThreshold: 300
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 0
+          periodSeconds: 30
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 0
+          periodSeconds: 30
+        ports:
+        - name: model1-port
+          containerPort: ​⬤
