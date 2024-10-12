@@ -1,0 +1,110 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: speech-tts-nemo
+  namespace: sarvam
+  labels:
+    app: speech-tts-nemo
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  selector:
+    matchLabels:
+      app: speech-tts-nemo
+  template:
+    metadata:
+      labels:
+        app: speech-tts-nemo
+      annotations:
+        prometheus.io/port: "8002"
+        prometheus.io/path: "/metrics"
+        prometheus.io/scrape: "true"
+    spec:
+      serviceAccountName: default
+      nodeSelector:
+        type: sarvam
+      containers:
+      - name: speech-tts-nemo-container
+        image: "harbor-registry-prod.uidai.gov.in/sarvam/inference/tts/deployment-tts-triton:on-prem-v2"
+        imagePullPolicy: Always
+        command: ["/bin/sh", "-c"]
+        args: ["tritonserver --metrics-interval-ms=1000 --model-repository=\"/data/models\""]
+        volumeMounts:
+        - name: dshm
+          mountPath: /dev/shm
+        env:
+        - name: HUGGING_FACE_HUB_TOKEN
+          value: ""
+        - name: AZURE_CLIENT_ID
+          value: ""
+        - name: AZURE_TENANT_ID
+          value: ""
+        - name: AZURE_CLIENT_SECRET
+          value: ""
+        - name: PYTHONIOENCODING
+          value: "utf-8"
+        - name: PYTHONUNBUFFERED
+          value: "1"
+        - name: CONTAINER_METADATA
+          value: "tts-nemo-release-0.1.3.json"
+        - name: LD_LIBRARY_PATH
+          value: "/opt/riva/lib/:/opt/tritonserver/backends/pytorch/"
+        - name: IMAGE_TYPE
+          value: "riva"
+        - name: MODEL_NAME
+          value: "bulbul_0_4"
+        - name: EMBEDDING_MODEL_NAME
+          value: "Alibaba-NLP/gte-large-en-v1.5"
+        - name: PROMPT_INJECTION_MODEL_NAME
+          value: "protectai/deberta-v3-base-prompt-injection-v2"
+        - name: RERANKING_MODEL_NAME
+          value: "BAAI/bge-reranker-v2-m3"
+        resources:
+          limits:
+            nvidia.com/gpu: "1"
+          requests:
+            cpu: "1"
+            memory: "4Gi"
+            nvidia.com/gpu: "1"
+        ports:
+        - name: health-port
+          containerPort: 8000
+        - name: metrics-port
+          containerPort: 8002
+        startupProbe:
+          httpGet:
+            path: /v2/health/ready
+            port: health-port
+          initialDelaySeconds: 0
+          periodSeconds: 20
+          failureThreshold: 500
+        readinessProbe:
+          httpGet:
+            path: /v2/health/ready
+            port: health-port
+          initialDelaySeconds: 0
+          periodSeconds: 30
+        livenessProbe:
+          httpGet:
+            path: /v2/health/ready
+            port: health-port
+          initialDelaySeconds: 0
+          periodSeconds: 30
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      schedulerName: default-scheduler
+      tolerations:
+      - key: sku
+        operator: Equal
+        value: gpu
+        effect: NoSchedule
+      volumes:
+      - name: dshm
+        emptyDir:
+          medium: Memory
+          sizeLimit: 4Gi
