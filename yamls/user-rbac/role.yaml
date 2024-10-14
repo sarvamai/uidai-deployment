@@ -4,9 +4,17 @@ metadata:
   namespace: sarvam
   name: my-client-role
 rules:
-- apiGroups: [""]  # for core resources like services and configmaps
-  resources: ["configmaps", "services"]
+  # Permissions for ConfigMaps and Secrets (core resources)
+- apiGroups: [""]
+  resources: ["configmaps", "secrets", "services"]
   verbs: ["create", "get", "list", "watch", "update", "delete"]
-- apiGroups: ["apps"]  # for deployment-related resources
+
+  # Permissions for Deployments (apps group)
+- apiGroups: ["apps"]
   resources: ["deployments"]
+  verbs: ["create", "get", "list", "watch", "update", "delete"]
+
+  # Permissions for Horizontal Pod Autoscalers (HPA)
+- apiGroups: ["autoscaling"]
+  resources: ["horizontalpodautoscalers"]
   verbs: ["create", "get", "list", "watch", "update", "delete"]
