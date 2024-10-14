@@ -4,6 +4,9 @@ locals {
     "MAX_WORKERS" = {
       "value" = "5"
     }
+    "SILERO_PATH" = {
+      "value" = "/workspace/snakers4_silero-vad_v5.2"
+    }
   }
 
   sarvam_vad_service_env_from = {
