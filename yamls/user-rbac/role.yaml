@@ -1,0 +1,12 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: sarvam
+  name: my-client-role
+rules:
+- apiGroups: [""]  # for core resources like services and configmaps
+  resources: ["configmaps", "services"]
+  verbs: ["create", "get", "list", "watch", "update", "delete"]
+- apiGroups: ["apps"]  # for deployment-related resources
+  resources: ["deployments"]
+  verbs: ["create", "get", "list", "watch", "update", "delete"]
