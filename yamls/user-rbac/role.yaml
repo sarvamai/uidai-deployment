@@ -4,14 +4,14 @@ metadata:
   namespace: sarvam
   name: my-client-role
 rules:
-  # Permissions for ConfigMaps and Secrets (core resources)
+  # Permissions for ConfigMaps, Secrets, and Services (core resources)
 - apiGroups: [""]
   resources: ["configmaps", "secrets", "services"]
   verbs: ["create", "get", "list", "watch", "update", "delete"]
 
-  # Permissions for Deployments (apps group)
+  # Permissions for Deployments and StatefulSets (apps group)
 - apiGroups: ["apps"]
-  resources: ["deployments"]
+  resources: ["deployments", "statefulsets"]
   verbs: ["create", "get", "list", "watch", "update", "delete"]
 
   # Permissions for Horizontal Pod Autoscalers (HPA)
