@@ -28,7 +28,7 @@ locals {
     }
     "SARVAM_APP_RUNTIME_WS_URL" = {
       "ref"   = null /* object */
-      "value" = "ws://<ip>/channels/web-call-custom-auth"
+      "value" = "ws://10.10.109.28:31983/channels/web-call-custom-auth"
     }
     "TOGGLE_AUTH" = {
       "ref"   = null /* object */
