@@ -1,0 +1,205 @@
+{
+    "app_runtime_config": {
+        "agent_config": {
+            "global_prompt": "You are a helpful assistant created by Sarvam to gather feedback on the user's experience at Aadhar enrollment or update centres. Your primary objective is to gather insights about the overall experience at the centre. One key objective is to find out any instances of malpractice, such as operators requesting money. \nAvoid asking the user for confirmation. Move directly to the next question.\n\nHere are some examples of Aadhar enrollment centres. The format is. {Centre_Name}, {Area}, {City}\n1) SBI Bank, Rbi Layout, Bengaluru\n2) Aadhaar Seva Kendra, Dabhel Check Post, Daman\n3) HDFC Bank, Connaught Place, Delhi\n4) Aadhaar Seva Kendra, Kandakatla Gateway, Warangal\n\n#FAQ\nEID stands for Enrollment ID, which is a 28-digit unique identification number assigned to each Aadhaar applicant during the enrollment process. It is a temporary identification number issued by UIDAI before the Aadhaar number is generated.",
+            "response_style": "Authoritative & Confident: Trustworthy, decisive, reliable.",
+            "global_context": "Unique Identification Authority of India, is an organization responsible for issuing and managing the Aadhaar identification system in India. Aadhaar is a biometric identification system designed to provide a unique identification number to the billion residents of India.",
+            "global_action_names": [
+                "update_variables",
+                "end_conversation"
+            ],
+            "global_tool_names": [],
+            "system_prompt_template_type": "audio_dynamic_action_agent",
+            "system_prompt_role": "system",
+            "initial_bot_message": {
+                "thought": {
+                    "update_variables": {},
+                    "end_conversation": false
+                },
+                "audio": "Hello {{UserName}}. I am calling from Aadhar. Can you answer a few questions about your recent enrollment?"
+            },
+            "agent_variables": {
+                "UserSpecifiedLocation": {
+                    "name": "UserSpecifiedLocation",
+                    "value": "",
+                    "description": "The enrollment location",
+                    "is_agent_updatable": true,
+                    "needs_initial_value": false,
+                    "one_of": []
+                },
+                "EnrollmentNumberLastDigits": {
+                    "name": "EnrollmentNumberLastDigits",
+                    "value": "4272",
+                    "description": "Enrollment Number of the user",
+                    "is_agent_updatable": false,
+                    "needs_initial_value": true,
+                    "one_of": []
+                },
+                "DateOfVisit": {
+                    "name": "DateOfVisit",
+                    "value": "11th September",
+                    "description": "Date of user's visit to the centre",
+                    "is_agent_updatable": false,
+                    "needs_initial_value": true,
+                    "one_of": []
+                },
+                "UserName": {
+                    "name": "UserName",
+                    "value": "Kushaan",
+                    "description": "Name of the User",
+                    "is_agent_updatable": false,
+                    "needs_initial_value": true,
+                    "one_of": []
+                }
+            },
+            "internal_variables": {},
+            "kb_config": {},
+            "states": {
+                "QA": {
+                    "name": "QA",
+                    "goal": "Confirm with the user that they went to the Aadhar center on the specified date and record the address of the Aadhar Centre. User needs to provide Centre_Name, Area and City",
+                    "instructions": "-If the user agrees to give feedback.\n    -Then ask them \"Did you visit the aadhar center on {{ DateOfVisit }}\".\n    -Then ask \"Are last four digits of your EID number {{EnrollmentNumberLastDigits }}?\".\n        -If the user says that the date and enrollment number values are wrong, then thank them for answering the question and end the call.\n        -If the user confirms that the values are correct, move on to the next question.\n    -Ask the user \"Can you verify, what was the name and location of the Aadhaar centre that you visited?\" and update variable:UserSpecifiedLocation.\n        If the user fails to provide any one or more of the fields, then ask them again to provide those.\n            -E.g. If the user only provides the City, then ask for Centre_Name and Area\n            -E.g. If the Centre name is missing then ask the user to specify the name of the centre\n        -Do not assume values for the address or missing names, only record whatever information is given by the user.\n        -If the user says they do not remember the address:\n            -If they have not specified the Area, ask them kindly to try and think of the Area.\n                -If they remember the Area ask them to think of enrollment centres in that Area that they could have potentially gone to.\n            -If the user still says they do not remember then tahnk them and end the conversation.\n        -Verify the recorded UserSpecifiedLocation with the user. If the value is wrong, ask them to specify the address again.\n        -Say \"Thank you for answering the questions.\" and end the conversation. \n-If the user does not want to answer, thank them and end the conversation.\n\n##General Guidelines\n-Strictly ask only ONE question at a time to the user.\n-Be succint and crisp in your communication. \n-Respond in simple Indian spoken English. Strictly respond in one sentence ONLY.\n-Instead of \"Just to confirm\", say \"Please confirm that you...\".",
+                    "context": null,
+                    "tool_names": [],
+                    "next_states": []
+                }
+            },
+            "initial_state_name": "QA",
+            "llm_model_mode": "base_inference"
+        },
+        "tool_agent_config": {
+            "system_prompt_template_type": "tool_agent_system_prompt",
+            "system_prompt_role": "system",
+            "user_prompt_template_type": "tool_agent_user_prompt",
+            "user_prompt_role": "user",
+            "llm_model_mode": "base_inference",
+            "default_tools": []
+        },
+        "chat_llm_params": {
+            "llm_model_name": "llama-3.1-8b",
+            "lora_task_id": null,
+            "temperature": 0.1
+        },
+        "tool_llm_params": {
+            "llm_model_name": "llama-3.1-8b",
+            "lora_task_id": null,
+            "temperature": 0.1,
+            "stop_words": [],
+            "enable_client_stop": true,
+            "fallback_messages": [
+                "Sorry, we are facing technical difficulties. Please try again later!"
+            ],
+            "keep_openai_schema_in_prompt": true
+        },
+        "initial_language_code": "hi-IN",
+        "language_voice_settings_mapping": {
+            "hi-IN": {
+                "src_speaker": "hi-f-int",
+                "tgt_speaker": "hi-f-int",
+                "pitch": 0.0,
+                "volume": 1.1,
+                "pace": 1.0
+            },
+            "bn-IN": {
+                "src_speaker": "bn-f-limmits",
+                "tgt_speaker": "hi-f-int",
+                "pitch": 0.0,
+                "volume": 1.0,
+                "pace": 1.0
+            },
+            "gu-IN": {
+                "src_speaker": "gu-f-indictts",
+                "tgt_speaker": "hi-f-int",
+                "pitch": 0.0,
+                "volume": 1.0,
+                "pace": 1.0
+            },
+            "kn-IN": {
+                "src_speaker": "kn-f-ai4b",
+                "tgt_speaker": "kn-f-ai4b",
+                "pitch": -0.85,
+                "volume": 1.0,
+                "pace": 1.0
+            },
+            "ml-IN": {
+                "src_speaker": "ml-f-ai4b",
+                "tgt_speaker": "kn-f-ai4b",
+                "pitch": 0.0,
+                "volume": 1.0,
+                "pace": 1.0
+            },
+            "mr-IN": {
+                "src_speaker": "mr-f-limmits",
+                "tgt_speaker": "hi-f-int",
+                "pitch": 0.0,
+                "volume": 1.0,
+                "pace": 1.0
+            },
+            "od-IN": {
+                "src_speaker": "od-f-indictts",
+                "tgt_speaker": "hi-f-int",
+                "pitch": 0.0,
+                "volume": 1.0,
+                "pace": 1.0
+            },
+            "pa-IN": {
+                "src_speaker": "pa-f-indictts",
+                "tgt_speaker": "hi-f-int",
+                "pitch": 0.0,
+                "volume": 1.0,
+                "pace": 1.0
+            },
+            "ta-IN": {
+                "src_speaker": "ta-f-ai4b",
+                "tgt_speaker": "ta-f-ai4b",
+                "pitch": 0.0,
+                "volume": 1.0,
+                "pace": 0.85
+            },
+            "te-IN": {
+                "src_speaker": "te-f-limmits",
+                "tgt_speaker": "kn-f-ai4b",
+                "pitch": 0.0,
+                "volume": 1.0,
+                "pace": 0.9
+            }
+        },
+        "pre_recorded_initial_bot_message_path": null,
+        "pre_recorded_initial_bot_message_transcript": "Hello {{UserName}}. I am calling from Aadhar. Can you answer a few questions about your recent enrollment?",
+        "en_language_change_short_audio_threshold": 0.6,
+        "in_language_change_short_audio_threshold": 0.95,
+        "language_change_short_audio_minimum_num_words": 3,
+        "en_language_id_threshold": null,
+        "in_language_id_threshold": null,
+        "speech_hotwords": "EID",
+        "tool_runner_parameters": {
+            "parameters": {
+                "retrieval_query": {
+                    "kb_id": null
+                }
+            }
+        },
+        "wa_pipeline_config": {
+            "send_audio_as_romanised_text": false,
+            "send_audio_as_transliterated_text": false,
+            "send_text_as_romanised": false,
+            "chat_timeout_in_minutes": 1440
+        },
+        "indic_voice_style": "formal",
+        "enable_lid": false,
+        "agentic_lid": false,
+        "supported_agentic_lid_languages": [],
+        "language_switch_acknowledgement": "",
+        "include_asr_context": true,
+        "thread_window": null,
+        "structured_content_thread_window": null,
+        "tool_calls_thread_window": null
+    },
+    "app_full_name": {
+        "org": "sarvamai",
+        "workspace": "default",
+        "app": "DeviceLocationChangeAgent"
+    },
+    "created_by": "kushan",
+    "updated_by": "kushan"
+}
