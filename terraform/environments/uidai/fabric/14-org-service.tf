@@ -69,7 +69,7 @@ module "org_service" {
   apply_default_liveness_probe = true
 
   hpa = {
-    "max_replicas" = 2
+    "max_replicas" = 1
     "min_replicas" = 1
     "resource_metrics" = [
       {

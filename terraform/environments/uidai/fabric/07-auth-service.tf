@@ -92,7 +92,7 @@ module "auth_service" {
   ]
 
   hpa = {
-    "max_replicas" = 2
+    "max_replicas" = 1
     "min_replicas" = 1
     "resource_metrics" = [
       {

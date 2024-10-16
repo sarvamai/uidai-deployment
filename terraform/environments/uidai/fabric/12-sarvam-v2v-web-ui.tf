@@ -98,7 +98,7 @@ module "sarvam_v2v_web_ui" {
   liveliness_probe_port        = "3000"
 
   hpa = {
-    "max_replicas" = 2
+    "max_replicas" = 1
     "min_replicas" = 1
     "resource_metrics" = [
       {
@@ -123,5 +123,7 @@ module "sarvam_v2v_web_ui" {
       }
     }
   }
+
+  gpu_toleration = true
 }
 

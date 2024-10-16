@@ -103,7 +103,7 @@ module "client_auth" {
   liveliness_probe_port        = "3000"
 
   hpa = {
-    "max_replicas" = 2
+    "max_replicas" = 1
     "min_replicas" = 1
     "resource_metrics" = [
       {
