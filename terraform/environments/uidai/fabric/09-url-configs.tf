@@ -18,7 +18,7 @@ module "on_prem_model_urls" {
   source = "../../../modules/config-maps"
 
   name       = "on-prem-model-urls"
-  namespaces = ["default"]
+  namespaces = [var.fabric_namespace]
   data = {
     HOSTED_EMBEDDING_URL         = "speech-tts-nemo-service.${var.models_namespace}:8000"
     HOSTED_RERANKING_URL         = "speech-tts-nemo-service.${var.models_namespace}:8000"

@@ -19,18 +19,21 @@ terraform {
     }
   }
 
-    backend "s3" {
-    bucket                      = "test-bucket"
-    key                         = "fabric.tfstate"
-    region                      = "some-region"                             # Ignore this value
-    endpoint                    = "https://<ceph-storgae-url>" # Your Ceph S3 endpoint
-    access_key                  = "minioadmin"                              # Access key for your Ceph user
-    secret_key                  = "minioadmin"                              # Secret key for your Ceph user
-    skip_credentials_validation = true                                    
-    skip_region_validation      = true                                     
-    skip_metadata_api_check     = true                                     
-    skip_requesting_account_id  = true                                     
-    force_path_style            = true                                     
+  #   backend "s3" {
+  #   bucket                      = "test-bucket"
+  #   key                         = "fabric.tfstate"
+  #   region                      = "some-region"                             # Ignore this value
+  #   endpoint                    = "https://<ceph-storgae-url>" # Your Ceph S3 endpoint
+  #   access_key                  = "minioadmin"                              # Access key for your Ceph user
+  #   secret_key                  = "minioadmin"                              # Secret key for your Ceph user
+  #   skip_credentials_validation = true                                    
+  #   skip_region_validation      = true                                     
+  #   skip_metadata_api_check     = true                                     
+  #   skip_requesting_account_id  = true                                     
+  #   force_path_style            = true                                     
+  # }
+  backend "local" {
+    path = "../tfstates/fabric.tfstate"
   }
 }
 

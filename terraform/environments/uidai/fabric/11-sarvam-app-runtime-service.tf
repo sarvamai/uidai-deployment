@@ -232,7 +232,7 @@ module "sarvam_app_runtime_svc" {
   containers = [{
     "env_from"          = local.sarvam_app_runtime_env_from
     "env_vars"          = local.sarvam_app_runtime_env_vars
-    "image"             = "${var.docker_registry_name}/sarvam-app-runtime-service:v0.0.108-test"
+    "image"             = "${var.docker_registry_name_sarvam}/sarvam-app-runtime-service:v0.2.3"
     "image_pull_policy" = "Always"
     "name"              = "sarvam-app-runtime-service"
     "ports" = {

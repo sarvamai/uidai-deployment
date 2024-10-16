@@ -1,6 +1,6 @@
 image:
   # registry where weaviate image is stored
-  registry: cr.weaviate.io
+  registry: uidaimodels.azurecr.io
   # Tag of weaviate image to deploy
   # Note: We strongly recommend you overwrite this value in your own values.yaml.
   # Otherwise a mere upgrade of the chart could lead to an unexpected upgrade
@@ -49,7 +49,7 @@ initContainers:
     enabled: true
     sysctlVmMaxMapCount: 524288
     image:
-      registry: docker.io
+      registry: uidaimodels.azurecr.io
       repo: alpine
       tag: latest
       pullPolicy: IfNotPresent

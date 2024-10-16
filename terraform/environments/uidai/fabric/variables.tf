@@ -74,6 +74,11 @@ variable "docker_registry_name" {
   default = "uidaimodels.azurecr.io"
 }
 
+variable "docker_registry_name_sarvam" {
+  type    = string
+  default = "gitopsdocker.azurecr.io"
+}
+
 variable "fabric_namespace" {
   type    = string
   default = "default"

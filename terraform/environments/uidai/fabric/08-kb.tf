@@ -116,7 +116,7 @@ module "knowledge_base_authoring_service" {
     "name"              = "knowledge-base-authoring-service"
     "env_from"          = local.kb_env_from
     "env_vars"          = local.kb_env_vars
-    "image"             = "${var.docker_registry_name}/knowledge-base-service:v0.1.93"
+    "image"             = "${var.docker_registry_name_sarvam}/knowledge-base-service:v0.1.96-test"
     "image_pull_policy" = "Always"
     "ports" = {
       "http" = {
@@ -179,7 +179,7 @@ module "knowledge_base_authoring_service_worker" {
     "name"              = "knowledge-base-service-worker"
     "env_from"          = local.kb_env_from
     "env_vars"          = local.kb_worker_env_vars
-    "image"             = "${var.docker_registry_name}/knowledge-base-service:v0.1.93"
+    "image"             = "${var.docker_registry_name_sarvam}/knowledge-base-service:v0.1.96-test"
     "image_pull_policy" = "Always"
     "resources" = {
       "requests" = {
@@ -234,7 +234,7 @@ module "knowledge_base_runtime_service" {
     "name"              = "knowledge-base-service"
     "env_from"          = local.kb_env_from
     "env_vars"          = local.kb_query_service_env_vars
-    "image"             = "${var.docker_registry_name}/knowledge-base-service:v0.1.93"
+    "image"             = "${var.docker_registry_name_sarvam}/knowledge-base-service:v0.1.96-test"
     "image_pull_policy" = "Always"
     "ports" = {
       "http" = {

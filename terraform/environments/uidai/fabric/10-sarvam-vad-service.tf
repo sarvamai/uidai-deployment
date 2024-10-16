@@ -5,7 +5,7 @@ locals {
       "value" = "5"
     }
     "SILERO_PATH" = {
-      "value" = "/workspace/snakers4_silero-vad_v5.2"
+      "value" = "/workspace/snakers4_silero-vad_v5.1"
     }
   }
 
@@ -29,7 +29,7 @@ module "sarvam_vad_service" {
     {
       "env_from"          = local.sarvam_vad_service_env_from
       "env_vars"          = local.env_vars
-      "image"             = "${var.docker_registry_name}/sarvam-vad-service:v0.1.2"
+      "image"             = "${var.docker_registry_name}/sarvam-vad-service:v0.1.2.on-prem.fix"
       "image_pull_policy" = "Always"
       "name"              = "sarvam-vad-service"
       "ports" = {
