@@ -21,7 +21,7 @@ locals {
       "value" = "VoNoeL47YPHlsd02mCG1KlXOFdJJqHyTR2GjEJL/A7w="
     }
     "NEXTAUTH_URL" = {
-      "value" = "http://<ip>/api/authentication"
+      "value" = "http://4.157.157.99/api/authentication"
     }
     "SARVAM_APP_RUNTIME_HTTP_URL" = {
       "value" = "http://auth-service"
@@ -70,7 +70,7 @@ module "sarvam_v2v_web_ui" {
     {
       "env_from"          = local.sarvam_v2v_web_ui_env_from
       "env_vars"          = local.sarvam_v2v_web_ui_env_vars
-      "image"             = "${var.docker_registry_name}/sarvam-v2v-web-ui:v0.0.2-onprem"
+      "image"             = "${var.docker_registry_name_sarvam}/sarvam-v2v-web-ui:v0.0.3-onprem"
       "image_pull_policy" = "Always"
       "name"              = "sarvam-v2v-web-ui"
       "ports" = {
@@ -122,6 +122,7 @@ module "sarvam_v2v_web_ui" {
         "target_port" = 3000
       }
     }
+    "type" = "LoadBalancer"
   }
 
   gpu_toleration = true

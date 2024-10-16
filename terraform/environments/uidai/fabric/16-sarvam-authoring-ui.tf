@@ -104,6 +104,7 @@ module "sarvam_authoring_ui" {
         "target_port" = 3000
       }
     }
+    "type" = "LoadBalancer"
   }
   # gpu_toleration = true
 
