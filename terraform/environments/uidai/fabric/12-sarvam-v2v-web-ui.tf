@@ -64,7 +64,7 @@ module "sarvam_v2v_web_ui" {
   name                 = "sarvam-v2v-web-ui"
   namespace            = var.fabric_namespace
   service_account      = var.fabric_service_account
-  node_selector_labels = var.node_selector_labels
+  # node_selector_labels = var.node_selector_labels
 
   containers = [
     {
