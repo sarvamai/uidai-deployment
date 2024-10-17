@@ -21,14 +21,14 @@ locals {
       "value" = "VoNoeL47YPHlsd02mCG1KlXOFdJJqHyTR2GjEJL/A7w="
     }
     "NEXTAUTH_URL" = {
-      "value" = "http://4.157.171.249/api/authentication"
+      "value" = "http://4.157.157.99/api/authentication"
     }
     "SARVAM_APP_RUNTIME_HTTP_URL" = {
       "value" = "http://auth-service"
     }
     "SARVAM_APP_RUNTIME_WS_URL" = {
       "ref"   = null /* object */
-      "value" = "ws://4.157.171.249/channels/web-call-custom-auth"
+      "value" = "ws://4.157.157.99/channels/web-call-custom-auth"
     }
     "TOGGLE_AUTH" = {
       "ref"   = null /* object */
