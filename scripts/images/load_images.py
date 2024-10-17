@@ -195,9 +195,10 @@ async def main():
     # List of images to transfer: (image_name, image_tag)
     images_to_transfer = [
         # ("sarvam-vad-service", "v0.1.2"),
-        # ("auth-service", "v0.2.2"),
-        # ("sarvam-app-runtime-service", "v0.1.35"),
-        ("knowledge-base-service", "v0.1.93"),
+        ("auth-service", "v0.3.5"),
+        ("sarvam-app-authoring-service", "v0.0.24"),
+        ("sarvam-app-runtime-service","v0.2.3"),
+        ("knowledge-base-service","v0.1.96-test"),
     ]
 
     source_registry = "gitopsdocker.azurecr.io"

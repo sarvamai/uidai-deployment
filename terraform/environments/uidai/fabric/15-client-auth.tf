@@ -8,7 +8,7 @@ locals {
 
   client_auth_env_vars = {
     "SARVAM_BASE_URL" = {
-      "value" = "https://apps-staging.sarvam.ai/api"
+      "value" = "http://4.157.157.106"
     }
     "GOOGLE_CLIENT_ID" = {
       "ref"   = null /* object */
@@ -18,10 +18,10 @@ locals {
       "value" = ""
     }
     "NEXTAUTH_SECRET" = {
-      "value" = ""
+      "value" = "VoNoeL47YPHlsd02mCG1KlXOFdJJqHyTR2GjEJL/A7w="
     }
     "NEXTAUTH_URL" = {
-      "value" = "https://agents-staging.sarvam.ai/auth/api/auth"
+      "value" = "http://4.157.157.106/auth/api/auth"
     }
     "TOGGLE_AUTH" = {
       "value" = "false"
@@ -64,7 +64,7 @@ module "client_auth" {
     {
       "env_from"          = local.client_auth_env_from
       "env_vars"          = local.client_auth_env_vars
-      "image"             = "${var.docker_registry_name_sarvam}/client-auth:v0.0.17"
+      "image"             = "${var.docker_registry_name_sarvam}/client-auth:v0.0.2-onprem"
       "image_pull_policy" = "Always"
       "name"              = "client-auth"
       "ports" = {
@@ -127,6 +127,7 @@ module "client_auth" {
         "target_port" = 3000
       }
     }
+    type = "LoadBalancer"
   }
   # gpu_toleration = true
 }

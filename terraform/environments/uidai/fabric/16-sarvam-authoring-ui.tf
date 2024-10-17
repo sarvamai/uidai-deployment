@@ -8,33 +8,33 @@ locals {
 
   sarvam_authoring_ui_env_vars = {
     "SARVAM_BASE_URL" = {
-      "value" = "https://apps-staging.sarvam.ai/api"
+      "value" = "http://4.157.157.106/api"
     }
     "SARVAM_KB_URL" = {
-      "value" = "http://knowledge-base-authoring-service"
+      "value" = "http://48.216.162.2"
     }
     "SARVAM_AUTH_URL" = {
       "ref"   = null /* object */
       "value" = "http://auth-service"
     }
     "NEXTAUTH_SECRET" = {
-      "value" = ""
+      "value" = "VoNoeL47YPHlsd02mCG1KlXOFdJJqHyTR2GjEJL/A7w="
     }
     "NEXTAUTH_URL" = {
-      value = "https://agents-staging.sarvam.ai/auth/api/auth"
+      value = "http://4.157.173.86/auth/api/auth"
     }
     "NEXT_AUTH_BASE_PATH" = {
       value = "/auth"
     }
     "NEXT_AUTH_URL" = {
-      value = "https://agents-staging.sarvam.ai"
+      value = "http://4.157.157.106"
     }
     "ORG_URL" = {
       "ref"   = null /* object */
       "value" = "http://org-service"
     }
     "SARVAM_WS_BASE_URL" = {
-      "value" = "wss://apps-staging.sarvam.ai/api"
+      "value" = "ws://4.157.171.249"
     }
   }
 
@@ -51,7 +51,7 @@ module "sarvam_authoring_ui" {
     {
       "env_from"          = local.sarvam_authoring_ui_env_from
       "env_vars"          = local.sarvam_authoring_ui_env_vars
-      "image"             = "${var.docker_registry_name_sarvam}/sarvam-authoring-ui:v0.0.80"
+      "image"             = "${var.docker_registry_name_sarvam}/sarvam-authoring-ui:v0.0.1-onprem"
       "image_pull_policy" = "Always"
       "name"              = "sarvam-authoring-ui"
       "ports" = {

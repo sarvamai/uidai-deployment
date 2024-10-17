@@ -159,7 +159,7 @@ module "knowledge_base_authoring_service" {
         "target_port" = 8080
       }
     }
-    type = "ClusterIP"
+    type = "LoadBalancer"
   }
 
   gpu_toleration = true
