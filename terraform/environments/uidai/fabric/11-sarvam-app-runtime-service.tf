@@ -222,7 +222,7 @@ locals {
         "value" = "http://auth-service"
       }
       "SARVAM_APP_AUTHORING_SERVICE_URL" = {
-        "value" = "http://sarvam-app-authoring-service"
+        "value" = "http://sarvam-app-authoring-runtime-service"
       }
   })
 
