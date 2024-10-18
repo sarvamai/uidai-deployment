@@ -8,7 +8,7 @@ locals {
 
   sarvam_authoring_ui_env_vars = {
     "SARVAM_BASE_URL" = {
-      "value" = "http://4.157.157.106/api"
+      "value" = "http://4.255.109.187/api"
     }
     "SARVAM_KB_URL" = {
       "value" = "http://48.216.162.2"
@@ -21,20 +21,23 @@ locals {
       "value" = "VoNoeL47YPHlsd02mCG1KlXOFdJJqHyTR2GjEJL/A7w="
     }
     "NEXTAUTH_URL" = {
-      value = "http://4.157.173.86/auth/api/auth"
+      value = "http://4.255.109.187/auth/api/auth"
     }
     "NEXT_AUTH_BASE_PATH" = {
       value = "/auth"
     }
     "NEXT_AUTH_URL" = {
-      value = "http://4.157.157.106"
+      value = "http://4.255.109.187"
     }
     "ORG_URL" = {
       "ref"   = null /* object */
       "value" = "http://org-service"
     }
     "SARVAM_WS_BASE_URL" = {
-      "value" = "ws://4.157.171.249"
+      "value" = "ws://4.255.109.187/api"
+    }
+    "SARVAM_APP_AUTHORING_URL" = {
+      "value" = "http://52.191.224.88"
     }
   }
 
@@ -51,7 +54,7 @@ module "sarvam_authoring_ui" {
     {
       "env_from"          = local.sarvam_authoring_ui_env_from
       "env_vars"          = local.sarvam_authoring_ui_env_vars
-      "image"             = "${var.docker_registry_name_sarvam}/sarvam-authoring-ui:v0.0.1-onprem"
+      "image"             = "${var.docker_registry_name_sarvam}/sarvam-authoring-ui:v0.0.84"
       "image_pull_policy" = "Always"
       "name"              = "sarvam-authoring-ui"
       "ports" = {
@@ -104,7 +107,6 @@ module "sarvam_authoring_ui" {
         "target_port" = 3000
       }
     }
-    "type" = "LoadBalancer"
   }
   # gpu_toleration = true
 

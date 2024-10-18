@@ -15,7 +15,12 @@ locals {
   sarvam_app_authoring_service_vars = merge(
     {
       "TOKEN_JWT_SECRET_ACCESS_KEY" = {
-        "value" = ""
+        "ref" = {
+          "key"    = "TOKEN_JWT_SECRET_ACCESS_KEY"
+          "name"   = "auth-shared-secrets"
+          "source" = "secretKeyRef"
+        }
+        "value" = tostring(null)
       }
       "OPENAI_API_KEY" = {
         value = ""
@@ -37,15 +42,15 @@ locals {
 module "sarvam_app_authoring_service" {
   source = "../../../modules/deployment"
 
-  name      = "sarvam-app-authoring-service"
-  namespace            = var.fabric_namespace
-  service_account      = var.fabric_service_account
+  name            = "sarvam-app-authoring-service"
+  namespace       = var.fabric_namespace
+  service_account = var.fabric_service_account
   # node_selector_labels = var.node_selector_labels
 
   containers = [{
     "env_from"          = local.sarvam_app_authoring_service_from
     "env_vars"          = local.sarvam_app_authoring_service_vars
-    "image"             = "${var.docker_registry_name_sarvam}/sarvam-app-authoring-service:v0.0.24"
+    "image"             = "${var.docker_registry_name_sarvam}/sarvam-app-authoring-service:v0.0.27"
     "image_pull_policy" = "Always"
     "name"              = "sarvam-app-authoring-service"
     "ports" = {
@@ -104,6 +109,7 @@ module "sarvam_app_authoring_service" {
         "target_port" = 8080
       }
     }
+    "type" = "LoadBalancer"
   }
 
   # gpu_toleration = true

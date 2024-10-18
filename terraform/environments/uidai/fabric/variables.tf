@@ -106,13 +106,13 @@ variable "node_selector_labels" {
 # Bucket name shoud be `knowledge-base`
 variable "kb_storage_path" {
   type = string
-  default = "https://852d-2405-201-d008-3067-d076-ddb5-91bd-496c.ngrok-free.app/test-bucket/knowledge-base"
+  default = "https://8057-119-82-126-78.ngrok-free.app/test-bucket/knowledge-base"
 }
 
 # Bucket name shoud be `apps`
 variable "app_storge_path" {
   type = string
-  default = "https://852d-2405-201-d008-3067-d076-ddb5-91bd-496c.ngrok-free.app/test-bucket/app-storage/apps"
+  default = "https://8057-119-82-126-78.ngrok-free.app/test-bucket/app-storage/apps"
 }
 
 # Ceph credentials

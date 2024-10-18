@@ -23,7 +23,11 @@ locals {
         value = ""
       }
       "SARVAM_ASR_URL" = {
-        value = "speech-whisper-batched-service:8000"
+        "ref" = {
+          "key"    = "SARVAM_ASR_URL"
+          "name"   = local.model_urls_configmap_name
+          "source" = "configMapKeyRef"
+        }
       }
       "LLAMAGUARD_URL" = {
         "ref" = {
@@ -217,6 +221,9 @@ locals {
       "SARVAM_PERSONAL_RECORD_SERVICE_URL" = {
         "value" = "http://auth-service"
       }
+      "SARVAM_APP_AUTHORING_SERVICE_URL" = {
+        "value" = "http://sarvam-app-authoring-service"
+      }
   })
 
 }
@@ -232,7 +239,7 @@ module "sarvam_app_runtime_svc" {
   containers = [{
     "env_from"          = local.sarvam_app_runtime_env_from
     "env_vars"          = local.sarvam_app_runtime_env_vars
-    "image"             = "${var.docker_registry_name_sarvam}/sarvam-app-runtime-service:v0.2.3"
+    "image"             = "${var.docker_registry_name_sarvam}/sarvam-app-runtime-service:v0.2.7"
     "image_pull_policy" = "Always"
     "name"              = "sarvam-app-runtime-service"
     "ports" = {

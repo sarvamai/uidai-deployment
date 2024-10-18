@@ -21,14 +21,24 @@ locals {
       "ref"   = null /* object */
       "value" = "false"
     }
-    "TOKEN_JWT_SECRET_ACCESS_KEY" = {
-      "value" = ""
-    }
-    "TOKEN_JWT_SECRET_REFRESH_KEY" = {
-      "value" = ""
-    }
     "FIRST_ORG_CREATE" = {
       value = "true"
+    }
+    "TOKEN_JWT_SECRET_ACCESS_KEY" = {
+      "ref" = {
+        "key"    = "TOKEN_JWT_SECRET_ACCESS_KEY"
+        "name"   = "auth-shared-secrets"
+        "source" = "secretKeyRef"
+      }
+      "value" = tostring(null)
+    }
+    "TOKEN_JWT_SECRET_REFRESH_KEY" = {
+      "ref" = {
+        "key"    = "TOKEN_JWT_SECRET_REFRESH_KEY"
+        "name"   = "auth-service-secrets"
+        "source" = "secretKeyRef"
+      }
+      "value" = tostring(null)
     }
   }
 }

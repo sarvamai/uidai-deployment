@@ -28,7 +28,7 @@ locals {
     }
     "SARVAM_APP_RUNTIME_WS_URL" = {
       "ref"   = null /* object */
-      "value" = "ws://4.157.157.99/channels/web-call-custom-auth"
+      "value" = "ws://4.157.171.249/channels/web-call-custom-auth"
     }
     "TOGGLE_AUTH" = {
       "ref"   = null /* object */
@@ -70,7 +70,7 @@ module "sarvam_v2v_web_ui" {
     {
       "env_from"          = local.sarvam_v2v_web_ui_env_from
       "env_vars"          = local.sarvam_v2v_web_ui_env_vars
-      "image"             = "${var.docker_registry_name_sarvam}/sarvam-v2v-web-ui:v0.0.3-onprem"
+      "image"             = "${var.docker_registry_name_sarvam}/sarvam-v2v-web-ui"
       "image_pull_policy" = "Always"
       "name"              = "sarvam-v2v-web-ui"
       "ports" = {

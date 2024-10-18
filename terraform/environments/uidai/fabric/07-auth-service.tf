@@ -56,6 +56,10 @@ locals {
       "ref"   = null /* object */
       "value" = "10080" # 7 days
     }
+    "ORG_SERVICE_URL" = {
+      "ref"   = null /* object */
+      "value" = "http://org-service"
+    }
   }
 }
 
